@@ -10,6 +10,8 @@ import Testing
     )
     #expect(screen.name == "Posts")
     #expect(screen.unitTestClasses == ["PostsViewModelTests"])
+    #expect(screen.codePath == "App/App/Features/Posts")
+    #expect(screen.uiTestClasses == ["PostsUITests"])
 }
 
 @Test func resolvedScopeReportsAll() {

@@ -14,7 +14,8 @@ private func makeResolver(runner: CommandRunner, finder: FileFinder) -> ScopeRes
 @Test func resolvesNamedScreenWithDiscoveredTestClasses() throws {
     let finder = FakeFileFinder()
     finder.filesByDirectory["/repo/App/AppTests"] = [
-        "/repo/App/AppTests/Features/PostsViewModelTests.swift"
+        "/repo/App/AppTests/Features/PostsViewModelTests.swift",
+        "/repo/App/AppTests/Features/OrdersViewModelTests.swift" // decoy: must NOT match "Posts*Tests.swift"
     ]
     finder.filesByDirectory["/repo/App/AppUITests"] = [
         "/repo/App/AppUITests/PostsUITests.swift"
@@ -72,4 +73,38 @@ private func makeResolver(runner: CommandRunner, finder: FileFinder) -> ScopeRes
 @Test func allScopeReturnsAll() throws {
     let resolver = makeResolver(runner: FakeCommandRunner(), finder: FakeFileFinder())
     #expect(try resolver.resolve(.all).isAll)
+}
+
+@Test func featuresRootSourceFileEscalatesToAll() throws {
+    let runner = FakeCommandRunner()
+    runner.stub(whenContains: "diff", result: ProcessResult(
+        exitCode: 0,
+        stdout: "App/App/Features/FeatureRoute.swift\n",
+        stderr: ""
+    ))
+    let resolver = makeResolver(runner: runner, finder: FakeFileFinder())
+    #expect(try resolver.resolve(.branch(base: "main")).isAll)
+}
+
+@Test func branchDedupesFilesFromSameScreen() throws {
+    let runner = FakeCommandRunner()
+    runner.stub(whenContains: "diff", result: ProcessResult(
+        exitCode: 0,
+        stdout: "App/App/Features/Posts/PostsView.swift\nApp/App/Features/Posts/PostsViewModel.swift\n",
+        stderr: ""
+    ))
+    let resolver = makeResolver(runner: runner, finder: FakeFileFinder())
+    let scope = try resolver.resolve(.branch(base: "main"))
+    #expect(scope.screens.map(\.name) == ["Posts"])
+}
+
+@Test func branchThrowsWhenGitFails() {
+    let runner = FakeCommandRunner()
+    runner.stub(whenContains: "diff", result: ProcessResult(
+        exitCode: 128, stdout: "", stderr: "fatal: bad revision"
+    ))
+    let resolver = makeResolver(runner: runner, finder: FakeFileFinder())
+    #expect(throws: ScopeError.self) {
+        _ = try resolver.resolve(.branch(base: "nope"))
+    }
 }
