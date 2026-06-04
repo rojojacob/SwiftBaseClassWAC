@@ -109,5 +109,12 @@ custom_rules:
     regex: "\\b(APIClient|URLSession|Dependencies\\.live)\\b"
     message: "Views must not touch networking or the DI container directly — go through a ViewModel."
     severity: error
+  viewmodel_no_swiftui:
+    name: "ViewModel is UI-framework-free"
+    included: ".*ViewModel\\.swift"
+    excluded: ".*Tests.*"
+    regex: "^import +SwiftUI"
+    message: "View models must not import SwiftUI — keep presentation logic UI-agnostic (use Observation)."
+    severity: error
 
 reporter: "xcode"
