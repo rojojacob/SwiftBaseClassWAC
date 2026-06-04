@@ -250,7 +250,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\nif command -v swiftlint >/dev/null 2>&1; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed — run 'brew install swiftlint'\"\nfi\n";
+			shellScript = "# Linting runs in a dedicated CI job; skip the in-build phase there.\nif [ -n \"$CI\" ]; then\n  echo \"note: SwiftLint build phase skipped in CI (linted in a dedicated job)\"\n  exit 0\nfi\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\nif command -v swiftlint >/dev/null 2>&1; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed — run 'brew install swiftlint'\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
