@@ -18,6 +18,11 @@ final class CounterUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
 
+        // Navigate from Home into the Counter feature.
+        let counterEntry = app.buttons["home.counter"]
+        XCTAssertTrue(counterEntry.waitForExistence(timeout: 5))
+        counterEntry.tap()
+
         let value = app.staticTexts["counter.value"]
         XCTAssertTrue(value.waitForExistence(timeout: 5))
         assertLabel(value, becomes: "0")
