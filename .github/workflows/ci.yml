@@ -143,3 +143,21 @@ jobs:
         run: brew install swiftlint swiftformat
       - name: Scoped gate for changed screens
         run: ./gate branch --base "origin/${{ github.base_ref }}"
+
+  audit:
+    name: Audit (informational)
+    if: github.event_name == 'pull_request'
+    runs-on: macos-15
+    continue-on-error: true        # never blocks a PR (informational, per the standard)
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install SwiftLint & SwiftFormat
+        run: brew install swiftlint swiftformat
+      - name: gate audit (annotate + report)
+        run: ./gate audit --annotate
+      - name: Upload GATE_REPORT.md
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: gate-report
+          path: GATE_REPORT.md
