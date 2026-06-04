@@ -32,4 +32,5 @@ import Testing
     runner.stub(whenContains: "xcodebuild", result: ProcessResult(exitCode: 65, stdout: "", stderr: "TEST FAILED"))
     let result = try BuildTestStage().run(ResolvedScope(kind: .all, screens: []), makeContext(runner: runner))
     #expect(result.passed == false)
+    #expect(result.summary.contains("TEST FAILED"))
 }
