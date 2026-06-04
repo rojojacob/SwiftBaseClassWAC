@@ -27,6 +27,7 @@ analyzer_rules:
 
 excluded:
   - .build
+  - "**/.build"          # nested SwiftPM build dirs (e.g. Tooling/.build) — never lint vendored deps
   - DerivedData
   - "**/Generated"
   - fastlane
