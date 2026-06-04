@@ -3,6 +3,8 @@ public struct FormatStage: Stage {
     public init() {}
 
     public func run(_: ResolvedScope, _ context: GateContext) throws -> StageResult {
+        // Formatting is intentionally repo-wide regardless of scope: it is cheap and a
+        // consistent style must hold everywhere, not only in the screen under test.
         let result = try context.runner.run(["swiftformat", "--lint", "."], cwd: context.repoRoot)
         return StageResult(
             stage: .format,

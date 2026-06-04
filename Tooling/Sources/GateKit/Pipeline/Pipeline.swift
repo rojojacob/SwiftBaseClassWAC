@@ -1,3 +1,8 @@
+public enum PipelineError: Error, Equatable {
+    case unknownStage(String)
+    case noStages
+}
+
 public struct Pipeline {
     public let stages: [any Stage]
 
@@ -18,7 +23,7 @@ public struct Pipeline {
 }
 
 public extension Pipeline {
-    static func standard(for config: GateConfig) -> Pipeline {
+    static func standard(for config: GateConfig) throws -> Pipeline {
         var stages: [any Stage] = []
         for name in config.stages {
             switch name {
@@ -26,9 +31,13 @@ public extension Pipeline {
             case "lint": stages.append(LintStage())
             case "test": stages.append(BuildTestStage())
             case "build": continue // building is performed by the test stage
-            default: continue
+            // An unrecognized stage name is almost always a typo in gate.yml. Reject it
+            // rather than silently skipping a check the author believed was running.
+            default: throw PipelineError.unknownStage(name)
             }
         }
+        // An empty pipeline would "pass" having checked nothing — a misleading green.
+        guard !stages.isEmpty else { throw PipelineError.noStages }
         return Pipeline(stages: stages)
     }
 }

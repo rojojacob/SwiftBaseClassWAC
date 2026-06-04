@@ -46,8 +46,22 @@ private func anyContext() -> GateContext {
     #expect(report.results.count == 1)
 }
 
-@Test func standardFactoryMapsConfigStages() {
+@Test func standardFactoryMapsConfigStages() throws {
     // makeTestConfig() has stages [format, lint, build, test]; `build` folds into the test stage.
-    let pipeline = Pipeline.standard(for: makeTestConfig())
+    let pipeline = try Pipeline.standard(for: makeTestConfig())
     #expect(pipeline.stages.map(\.id) == [.format, .lint, .test])
+}
+
+@Test func standardFactoryRejectsUnknownStage() {
+    // A typo'd stage name must not be silently dropped — it would skip a real check.
+    #expect(throws: PipelineError.unknownStage("lnt")) {
+        _ = try Pipeline.standard(for: makeTestConfig(stages: "[format, lnt, test]"))
+    }
+}
+
+@Test func standardFactoryRejectsEmptyPipeline() {
+    // `build` folds into test and adds no stage of its own, so [build] yields nothing.
+    #expect(throws: PipelineError.noStages) {
+        _ = try Pipeline.standard(for: makeTestConfig(stages: "[build]"))
+    }
 }

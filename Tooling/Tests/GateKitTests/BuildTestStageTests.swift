@@ -34,3 +34,12 @@ import Testing
     #expect(result.passed == false)
     #expect(result.summary.contains("TEST FAILED"))
 }
+
+@Test func screenWithNoMatchingTestsFailsInsteadOfRunningEverything() throws {
+    let runner = FakeCommandRunner()
+    let ghost = Screen(name: "Ghost", codePath: "App/App/Features/Ghost", unitTestClasses: [], uiTestClasses: [])
+    let result = try BuildTestStage().run(ResolvedScope(kind: .screens, screens: [ghost]), makeContext(runner: runner))
+    #expect(result.passed == false)
+    #expect(runner.calls.isEmpty) // never shelled out to a bare, full-suite xcodebuild
+    #expect(result.summary.contains("no tests matched scope"))
+}
