@@ -42,14 +42,16 @@ platform :ios do
     # Sync signing assets from the private match repo (read-only on CI).
     match(type: "appstore", readonly: is_ci, api_key_path: ASC_KEY, force_legacy_encryption: MATCH_LEGACY)
 
-    # Bump the build number so each upload is unique.
-    increment_build_number(xcodeproj: PROJECT)
+    # Unique, always-increasing build number set at build time — no agvtool /
+    # apple-generic versioning required, and no version churn committed to git.
+    build_number = Time.now.strftime("%Y%m%d%H%M")
 
-    # Build the .ipa (archive + export).
+    # Build the signed .ipa (archive + export).
     build_app(
       project: PROJECT,
       scheme: SCHEME,
-      export_method: "app-store"
+      export_method: "app-store",
+      xcargs: "CURRENT_PROJECT_VERSION=#{build_number}"
     )
 
     # Upload to TestFlight without blocking on Apple's processing.
