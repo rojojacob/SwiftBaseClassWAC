@@ -67,6 +67,12 @@ public struct ScopeResolver {
         return ResolvedScope(kind: .screens, screens: names.sorted().map(screen(named:)))
     }
 
+    /// Every screen in the project: one per immediate subdirectory of the features dir.
+    public func allScreens() -> [Screen] {
+        let featuresDir = repoRoot.appendingPathComponent(config.conventions.featuresDir).path
+        return finder.subdirectories(of: featuresDir).sorted().map(screen(named:))
+    }
+
     private func screen(named name: String) -> Screen {
         let pattern = config.conventions.testGlob.replacingOccurrences(of: "{Name}", with: name)
         let unitDir = repoRoot.appendingPathComponent(config.conventions.unitDir).path
