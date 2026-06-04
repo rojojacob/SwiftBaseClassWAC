@@ -8,7 +8,7 @@ import Testing
 @testable import SwiftBaseClassWAC
 
 struct EndpointTests {
-    private let baseURL = URL(string: "https://api.test")!
+    private let baseURL = URL(string: "https://api.test") ?? URL(fileURLWithPath: "/")
 
     @Test func buildsURLWithPathAndQuery() throws {
         let endpoint = Endpoint(

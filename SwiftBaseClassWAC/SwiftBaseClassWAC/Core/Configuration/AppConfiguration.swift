@@ -32,9 +32,12 @@ struct AppConfiguration {
     /// The active configuration for this build.
     static let current: AppConfiguration = {
         let environment = AppEnvironment.current
+        // Fallback chain (no force-unwrap): xcconfig value → literal default →
+        // a guaranteed non-optional URL that is never actually reached.
         let baseURL = Bundle.main.infoValue(for: "API_BASE_URL")
             .flatMap { URL(string: $0.addingHTTPSchemeIfMissing) }
-            ?? URL(string: "https://api.example.com")! // safe fallback before xcconfig is wired
+            ?? URL(string: "https://api.example.com")
+            ?? URL(fileURLWithPath: "/")
         return AppConfiguration(environment: environment, apiBaseURL: baseURL)
     }()
 }
