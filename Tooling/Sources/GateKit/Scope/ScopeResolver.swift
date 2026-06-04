@@ -25,6 +25,8 @@ public struct ScopeResolver {
             return ResolvedScope(kind: .screens, screens: names.sorted().map(screen(named:)))
         case let .branch(base):
             return try resolveBranch(base: base)
+        case .staged:
+            return try resolveStaged()
         }
     }
 
@@ -33,38 +35,52 @@ public struct ScopeResolver {
         guard result.succeeded else {
             throw ScopeError.gitFailed("git diff \(base)...HEAD failed: \(result.stderr)")
         }
-        let changed = result.stdout
-            .split(separator: "\n")
-            .map(String.init)
-            .filter { !$0.isEmpty }
+        let changed = result.stdout.split(separator: "\n").map(String.init).filter { !$0.isEmpty }
+        if let escalated = sharedOrRootEscalation(changed) { return escalated }
+        let names = owningScreenNames(changed)
+        guard !names.isEmpty else { return ResolvedScope(kind: .all, screens: []) }
+        return ResolvedScope(kind: .screens, screens: names.sorted().map(screen(named:)))
+    }
 
-        // Any change to a shared directory affects every screen → run everything.
-        // Match on full path COMPONENTS (not substrings) so `Core/x.swift` at the
-        // repo root is caught and `Post` doesn't falsely match `PostDetails`.
+    private func resolveStaged() throws -> ResolvedScope {
+        let result = try runner.run(["git", "diff", "--cached", "--name-only"], cwd: repoRoot)
+        guard result.succeeded else {
+            throw ScopeError.gitFailed("git diff --cached failed: \(result.stderr)")
+        }
+        let changed = result.stdout.split(separator: "\n").map(String.init).filter { !$0.isEmpty }
+        // Unlike branch, an empty staged set means "nothing to gate" (not "run all").
+        if changed.isEmpty { return ResolvedScope(kind: .screens, screens: []) }
+        if let escalated = sharedOrRootEscalation(changed) { return escalated }
+        let names = owningScreenNames(changed)
+        return ResolvedScope(kind: .screens, screens: names.sorted().map(screen(named:)))
+    }
+
+    /// Shared-dir or features-root change → run everything (returns `.all`), else nil.
+    private func sharedOrRootEscalation(_ changed: [String]) -> ResolvedScope? {
         let sharedDirs = Set(config.conventions.sharedDirs)
         for file in changed where file.split(separator: "/").contains(where: { sharedDirs.contains(String($0)) }) {
             return ResolvedScope(kind: .all, screens: [])
         }
+        let prefix = config.conventions.featuresDir + "/"
+        for file in changed where file.hasPrefix(prefix) {
+            let rest = file.dropFirst(prefix.count)
+            if !rest.contains("/"), file.hasSuffix(".swift") {
+                return ResolvedScope(kind: .all, screens: [])
+            }
+        }
+        return nil
+    }
 
-        // Map changed files under the features dir to their owning screen folder.
+    private func owningScreenNames(_ changed: [String]) -> Set<String> {
         let prefix = config.conventions.featuresDir + "/"
         var names = Set<String>()
         for file in changed where file.hasPrefix(prefix) {
             let rest = file.dropFirst(prefix.count)
-            guard let slash = rest.firstIndex(of: "/") else {
-                // A source file directly under the features dir is shared across screens.
-                if file.hasSuffix(".swift") {
-                    return ResolvedScope(kind: .all, screens: [])
-                }
-                continue
+            if let slash = rest.firstIndex(of: "/") {
+                names.insert(String(rest[..<slash]))
             }
-            names.insert(String(rest[..<slash]))
         }
-
-        guard !names.isEmpty else {
-            return ResolvedScope(kind: .all, screens: []) // unmappable changes → be safe, run all
-        }
-        return ResolvedScope(kind: .screens, screens: names.sorted().map(screen(named:)))
+        return names
     }
 
     /// Every screen in the project: one per immediate subdirectory of the features dir.
