@@ -7,7 +7,8 @@ struct Gate: ParsableCommand {
         abstract: "Scope-aware quality gate for the WAC iOS standard.",
         subcommands: [
             All.self, ScreenCommand.self, ScreensCommand.self, BranchCommand.self,
-            StagedCommand.self, FormatCommand.self, LintCommand.self, VerifyStampCommand.self
+            StagedCommand.self, FormatCommand.self, LintCommand.self, VerifyStampCommand.self,
+            AuditCommand.self
         ],
         defaultSubcommand: All.self
     )

@@ -97,3 +97,6 @@ Tooling/.build/
 
 # gate engine (local verification stamp + eco ledger)
 .gate/
+
+# gate audit output (regenerated; not committed)
+GATE_REPORT.md
