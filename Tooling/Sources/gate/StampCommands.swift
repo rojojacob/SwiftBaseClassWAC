@@ -16,15 +16,15 @@ struct VerifyStampCommand: ParsableCommand {
         let gate = try GateRunner.live(configPath: configURL, repoRoot: cwd)
         let result = try gate.verifyStamp(skip: skip)
         if result.skipped {
-            print("gate verify-stamp skipped (GATE_SKIP_STAMP=1)")
+            print("⚠︎ gate verify-stamp skipped (GATE_SKIP_STAMP=1)")
             return
         }
         if result.passed {
-            print("gate stamp current")
+            print("✔ gate stamp current")
             return
         }
         for name in result.staleScreens {
-            print("\(name) changed since last green gate — run 'gate screen \(name)'")
+            print("✘ \(name) changed since last green gate — run 'gate screen \(name)'")
         }
         throw ExitCode.failure
     }

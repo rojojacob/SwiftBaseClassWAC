@@ -1,6 +1,8 @@
 public struct BuildTestStage: Stage {
     public let id: StageID = .test
     private let unitOnly: Bool
+    /// `unitOnly` skips the UI `-only-testing:` targets for screen-scoped runs. It
+    /// has no effect on `.all` scope, which runs the whole suite (UI included).
     public init(unitOnly: Bool = false) {
         self.unitOnly = unitOnly
     }

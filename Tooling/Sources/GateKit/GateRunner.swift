@@ -27,6 +27,11 @@ public struct GateRunner {
     public func run(_ kind: ScopeKind, unitOnly: Bool = false) throws -> Report {
         let resolver = ScopeResolver(config: config, runner: runner, finder: finder, repoRoot: repoRoot)
         let scope = try resolver.resolve(kind)
+        // Nothing mapped to a screen (e.g. `gate staged` with only non-feature files
+        // staged) — there is nothing to gate, so pass without running the pipeline.
+        if scope.kind == .screens, scope.screens.isEmpty {
+            return Report(results: [])
+        }
         let pipeline = try Pipeline.standard(for: config, unitOnly: unitOnly)
         let context = GateContext(config: config, runner: runner, repoRoot: repoRoot)
         let report = try pipeline.run(scope: scope, context: context)

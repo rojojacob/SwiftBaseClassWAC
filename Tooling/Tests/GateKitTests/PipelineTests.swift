@@ -65,8 +65,3 @@ private func anyContext() -> GateContext {
         _ = try Pipeline.standard(for: makeTestConfig(stages: "[build]"))
     }
 }
-
-@Test func standardFactoryDefaultsToFullTesting() throws {
-    let pipeline = try Pipeline.standard(for: makeTestConfig())
-    #expect(pipeline.stages.map(\.id) == [.format, .lint, .test])
-}

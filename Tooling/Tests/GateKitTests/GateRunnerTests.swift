@@ -65,3 +65,23 @@ import Testing
     #expect(report.passed == false)
     #expect(store.saved.isEmpty) // never stamped on failure
 }
+
+@Test func stagedWithNothingToGateIsAPassingNoOp() throws {
+    let runner = FakeCommandRunner()
+    // Only a non-feature file staged → resolveStaged returns zero screens.
+    runner.stub(whenContains: "--cached", result: ProcessResult(exitCode: 0, stdout: "README.md\n", stderr: ""))
+    let gate = GateRunner(
+        config: makeTestConfig(),
+        runner: runner,
+        finder: FakeFileFinder(),
+        reader: FakeFileReader(),
+        stampStore: FakeStampStore(),
+        repoRoot: URL(fileURLWithPath: "/repo")
+    )
+
+    let report = try gate.run(.staged)
+
+    #expect(report.passed) // does not block the commit
+    #expect(report.results.isEmpty) // pipeline never ran
+    #expect(runner.calls.contains { $0.contains("xcodebuild") } == false) // never shelled out
+}
