@@ -156,4 +156,6 @@ A broken lint stops the pipeline before the expensive build ever runs.
 | `beta`    | match → bump build → build `.ipa` → upload to TestFlight |
 | `release` | match → build `.ipa` → submit for App Store review.      |
 
-Set `FASTLANE_APPLE_ID` and configure a `match` repo before using `beta`/`release`.
+Before using `beta`/`release`, complete the one-time account + credential setup
+in [docs/RELEASE_SETUP.md](docs/RELEASE_SETUP.md). Credentials are read from the
+environment (`fastlane/.env`, gitignored — see `fastlane/.env.example`).

@@ -56,11 +56,15 @@ fastlane/screenshots/**/*.png
 fastlane/test_output/
 fastlane/README.md
 
-## Signing assets must never be committed in the clear
+## Signing assets & credentials must never be committed in the clear
 *.mobileprovision
 *.p12
 *.cer
 *.certSigningRequest
+*.p8
+AuthKey_*.p8
+fastlane/.env
+# (fastlane/.env.example IS committed as a template)
 
 # ---------------------------------------------------------------------------
 # Tooling caches
