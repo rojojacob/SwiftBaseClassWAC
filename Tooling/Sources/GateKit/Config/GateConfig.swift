@@ -1,0 +1,61 @@
+import Foundation
+import Yams
+
+public struct GateTargets: Codable, Equatable, Sendable {
+    public let app: String
+    public let unit: String
+    public let ui: String
+}
+
+public struct GateConventions: Codable, Equatable, Sendable {
+    public let featuresDir: String
+    public let unitDir: String
+    public let uiDir: String
+    public let testGlob: String
+    public let sharedDirs: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case featuresDir = "features_dir"
+        case unitDir = "unit_dir"
+        case uiDir = "ui_dir"
+        case testGlob = "test_glob"
+        case sharedDirs = "shared_dirs"
+    }
+}
+
+public struct GateConfig: Codable, Equatable, Sendable {
+    public let project: String
+    public let scheme: String
+    public let targets: GateTargets
+    public let simulator: String
+    public let baseBranch: String
+    public let conventions: GateConventions
+    public let stages: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case project, scheme, targets, simulator, conventions, stages
+        case baseBranch = "base_branch"
+    }
+}
+
+public enum GateConfigError: Error, Equatable {
+    case fileNotFound(String)
+    case parseFailed(String)
+}
+
+public extension GateConfig {
+    static func parse(_ yaml: String) throws -> GateConfig {
+        do {
+            return try YAMLDecoder().decode(GateConfig.self, from: yaml)
+        } catch {
+            throw GateConfigError.parseFailed(String(describing: error))
+        }
+    }
+
+    static func load(from url: URL) throws -> GateConfig {
+        guard let text = try? String(contentsOf: url, encoding: .utf8) else {
+            throw GateConfigError.fileNotFound(url.path)
+        }
+        return try parse(text)
+    }
+}
