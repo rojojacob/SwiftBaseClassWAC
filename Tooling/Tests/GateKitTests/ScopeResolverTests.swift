@@ -1,0 +1,75 @@
+import Foundation
+import Testing
+@testable import GateKit
+
+private func makeResolver(runner: CommandRunner, finder: FileFinder) -> ScopeResolver {
+    ScopeResolver(
+        config: makeTestConfig(),
+        runner: runner,
+        finder: finder,
+        repoRoot: URL(fileURLWithPath: "/repo")
+    )
+}
+
+@Test func resolvesNamedScreenWithDiscoveredTestClasses() throws {
+    let finder = FakeFileFinder()
+    finder.filesByDirectory["/repo/App/AppTests"] = [
+        "/repo/App/AppTests/Features/PostsViewModelTests.swift"
+    ]
+    finder.filesByDirectory["/repo/App/AppUITests"] = [
+        "/repo/App/AppUITests/PostsUITests.swift"
+    ]
+    let resolver = makeResolver(runner: FakeCommandRunner(), finder: finder)
+
+    let scope = try resolver.resolve(.screens(["Posts"]))
+
+    #expect(scope.kind == .screens)
+    #expect(scope.screens.count == 1)
+    #expect(scope.screens[0].codePath == "App/App/Features/Posts")
+    #expect(scope.screens[0].unitTestClasses == ["PostsViewModelTests"])
+    #expect(scope.screens[0].uiTestClasses == ["PostsUITests"])
+}
+
+@Test func branchMapsChangedFilesToOwningScreens() throws {
+    let runner = FakeCommandRunner()
+    runner.stub(whenContains: "diff", result: ProcessResult(
+        exitCode: 0,
+        stdout: "App/App/Features/Posts/PostsView.swift\nApp/App/Features/Counter/CounterView.swift\n",
+        stderr: ""
+    ))
+    let resolver = makeResolver(runner: runner, finder: FakeFileFinder())
+
+    let scope = try resolver.resolve(.branch(base: "main"))
+
+    #expect(scope.kind == .screens)
+    #expect(scope.screens.map(\.name) == ["Counter", "Posts"]) // sorted
+}
+
+@Test func changeUnderSharedDirEscalatesToAll() throws {
+    let runner = FakeCommandRunner()
+    runner.stub(whenContains: "diff", result: ProcessResult(
+        exitCode: 0,
+        stdout: "App/App/Core/Networking/APIClient.swift\n",
+        stderr: ""
+    ))
+    let resolver = makeResolver(runner: runner, finder: FakeFileFinder())
+
+    let scope = try resolver.resolve(.branch(base: "main"))
+
+    #expect(scope.isAll)
+}
+
+@Test func branchWithNoMappableChangesFallsBackToAll() throws {
+    let runner = FakeCommandRunner()
+    runner.stub(whenContains: "diff", result: ProcessResult(
+        exitCode: 0, stdout: "README.md\n", stderr: ""
+    ))
+    let resolver = makeResolver(runner: runner, finder: FakeFileFinder())
+
+    #expect(try resolver.resolve(.branch(base: "main")).isAll)
+}
+
+@Test func allScopeReturnsAll() throws {
+    let resolver = makeResolver(runner: FakeCommandRunner(), finder: FakeFileFinder())
+    #expect(try resolver.resolve(.all).isAll)
+}
