@@ -16,19 +16,27 @@ fail-fast CI/CD pipeline. Built to mirror the full iOS release pipeline.
 ```
 SwiftBaseClassWAC/
   SwiftBaseClassWAC.xcodeproj
+  Config/                          # xcconfig per environment + partial Info.plist
   SwiftBaseClassWAC/            # app target (synchronized folder group)
-    App/                           # entry point + composition root (RootView)
-    Features/                      # one folder per feature
-      Counter/                     #   sample MVVM vertical: View + ViewModel + Model
-    Core/                          # shared services
-      Networking/                  #   APIClient abstraction
-    DesignSystem/                  # tokens (spacing/color/typography) + components
+    App/                           # entry point, RootView, Navigation/Router
+    Features/                      # one folder per feature (View+ViewModel+Model)
+      Counter/                     #   local-state MVVM sample
+      Posts/                       #   networked sample (APIClient + Router)
+    Core/
+      Networking/                  #   Endpoint, HTTPClient, interceptors, APIClient, APIError
+      DependencyInjection/         #   Dependencies container (environment-injected)
+      Persistence/                 #   KeychainStore + @AppStorage Codable bridge
+      Configuration/               #   AppConfiguration / AppEnvironment
+      Validation/                  #   ValidationRule
+      Logging/                     #   OSLog AppLogger
+    DesignSystem/                  # tokens + components (AsyncButton, ValidatedTextField) + modifiers
     Resources/                     # Assets.xcassets
-  SwiftBaseClassWACTests/       # unit tests (Swift Testing)
-  SwiftBaseClassWACUITests/     # UI tests (XCUITest)
-.github/workflows/ci.yml           # CI: lint -> test -> archive (fail fast)
-fastlane/                          # signing + TestFlight + App Store lanes
-.swiftlint.yml  .swiftformat  lefthook.yml
+  SwiftBaseClassWACTests/       # unit tests (Swift Testing) + Mocks/fixtures
+  SwiftBaseClassWACUITests/     # UI tests (XCUITest) + page-object helpers
+scripts/                           # preflight, feature scaffolder, shared helpers
+.github/workflows/                 # CI (lint→test→archive) + manual TestFlight
+fastlane/                          # signing (match) + TestFlight + App Store lanes
+Brewfile  .swiftlint.yml  .swiftformat  lefthook.yml  .editorconfig
 ```
 
 > **Note on test folders:** Xcode synchronized groups mean source files are
@@ -39,21 +47,56 @@ fastlane/                          # signing + TestFlight + App Store lanes
 
 ---
 
+## Architecture & building blocks
+
+- **MVVM + `@Observable`** view models; **constructor injection** with a live
+  default (`Dependencies.live.*`) so views are zero-config and tests pass mocks.
+- **Networking** (`Core/Networking`): build an `Endpoint`, hand it to `APIClient`
+  → it applies `RequestInterceptor`s (e.g. bearer token), sends over the
+  `HTTPClient` seam (mockable), validates the status, and decodes. `APIError`
+  carries the server error body; `MockURLProtocol` makes it all unit-testable.
+- **Dependency container** (`Dependencies`) injected via the SwiftUI environment.
+- **Persistence:** `KeychainStore` for secrets (tokens); `@AppStorage` works with
+  `Codable` collections via the `RawRepresentable` bridge.
+- **Navigation:** a `Router` drives a `NavigationStack`; features are routes.
+- **Toolkit:** `.onFirstAppear`, `AsyncButton`, `ValidatedTextField` +
+  `ValidationRule`, `.errorAlert`, and the design-system tokens/components.
+- **Config:** `AppConfiguration` / `AppEnvironment` read per-environment values
+  (see Environments below).
+
+Scaffold a new feature (Model + ViewModel + View + test) in one command:
+
+```bash
+./scripts/scaffold-feature.sh Profile
+```
+
+## Environments
+
+Per-environment values live in `Config/*.xcconfig` and are merged into the
+generated Info.plist via the partial `Config/Info.plist`, then read by
+`AppConfiguration.current`:
+
+| Build configuration | xcconfig | `API_BASE_URL` | `APP_ENVIRONMENT` |
+|---------------------|----------|----------------|-------------------|
+| Debug | `Development.xcconfig` | jsonplaceholder.typicode.com | development |
+| Release | `Production.xcconfig` | api.example.com | production |
+
+To add **Staging**: in Xcode → *Project ▸ Info ▸ Configurations*, duplicate
+Release as `Staging` and set its config file to `Config/Staging.xcconfig`.
+Secrets go in `Config/Secrets.xcconfig` (gitignored; copy from `Secrets.example.xcconfig`).
+
+---
+
 ## First-time setup
 
 ```bash
-# 1. Quality tools
-brew install swiftlint swiftformat lefthook
-
-# 2. Install git hooks (pre-commit format+lint, pre-push lint)
-lefthook install
-
-# 3. (Optional) fastlane for signing/distribution
-bundle install
+brew bundle        # swiftlint, swiftformat, lefthook, xcbeautify (see Brewfile)
+lefthook install   # git hooks: pre-commit (format+lint), commit-msg, pre-push
+bundle install     # (optional) fastlane for signing/distribution
 ```
 
 Open `SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj`, then **⌘R** to run and
-**⌘U** to test.
+**⌘U** to test. Before pushing, run **`./scripts/preflight.sh`** (the same gate as CI).
 
 ---
 
