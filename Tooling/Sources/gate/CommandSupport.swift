@@ -3,7 +3,13 @@ import Foundation
 import GateKit
 
 enum CommandSupport {
-    static func execute(common: CommonOptions, scope rawScope: ScopeKind, unitOnly: Bool = false) throws {
+    static func execute(
+        common: CommonOptions,
+        scope rawScope: ScopeKind,
+        unitOnly: Bool = false,
+        archive: Bool = false,
+        testflight: Bool = false
+    ) throws {
         let cwd = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
         let configURL = URL(fileURLWithPath: common.config, relativeTo: cwd)
         let gate = try GateRunner.live(configPath: configURL, repoRoot: cwd)
@@ -11,6 +17,17 @@ enum CommandSupport {
         let report = try gate.run(scope, unitOnly: unitOnly)
         printReport(report)
         if !report.passed { throw ExitCode.failure }
+
+        // Keyword release stages only run AFTER a green gate, and only when requested.
+        let context = GateContext(config: gate.config, runner: SystemCommandRunner(), repoRoot: cwd)
+        if archive { try runRelease(ArchiveStage(), context) }
+        if testflight { try runRelease(TestFlightStage(), context) }
+    }
+
+    private static func runRelease(_ stage: any Stage, _ context: GateContext) throws {
+        let result = try stage.run(ResolvedScope(kind: .all, screens: []), context)
+        print("\(result.passed ? "✔" : "✘") \(result.stage.rawValue): \(result.summary)")
+        if !result.passed { throw ExitCode.failure }
     }
 
     static func applyDefaults(_ scope: ScopeKind, config: GateConfig) -> ScopeKind {

@@ -7,9 +7,11 @@ struct All: ParsableCommand {
         abstract: "Gate the whole repository."
     )
     @OptionGroup var common: CommonOptions
+    @Flag(name: .long, help: "After a green gate, build an unsigned archive.") var archive = false
+    @Flag(name: .long, help: "After a green gate, upload to TestFlight via fastlane.") var testflight = false
 
     func run() throws {
-        try CommandSupport.execute(common: common, scope: .all)
+        try CommandSupport.execute(common: common, scope: .all, archive: archive, testflight: testflight)
     }
 }
 
@@ -20,10 +22,18 @@ struct ScreenCommand: ParsableCommand {
     )
     @Argument(help: "Screen name, e.g. Posts.") var name: String
     @Flag(name: .long, help: "Run unit tests only (skip UI tests).") var noUI = false
+    @Flag(name: .long, help: "After a green gate, build an unsigned archive.") var archive = false
+    @Flag(name: .long, help: "After a green gate, upload to TestFlight via fastlane.") var testflight = false
     @OptionGroup var common: CommonOptions
 
     func run() throws {
-        try CommandSupport.execute(common: common, scope: .screens([name]), unitOnly: noUI)
+        try CommandSupport.execute(
+            common: common,
+            scope: .screens([name]),
+            unitOnly: noUI,
+            archive: archive,
+            testflight: testflight
+        )
     }
 }
 
@@ -34,10 +44,18 @@ struct ScreensCommand: ParsableCommand {
     )
     @Argument(help: "Screen names.") var names: [String]
     @Flag(name: .long, help: "Run unit tests only (skip UI tests).") var noUI = false
+    @Flag(name: .long, help: "After a green gate, build an unsigned archive.") var archive = false
+    @Flag(name: .long, help: "After a green gate, upload to TestFlight via fastlane.") var testflight = false
     @OptionGroup var common: CommonOptions
 
     func run() throws {
-        try CommandSupport.execute(common: common, scope: .screens(names), unitOnly: noUI)
+        try CommandSupport.execute(
+            common: common,
+            scope: .screens(names),
+            unitOnly: noUI,
+            archive: archive,
+            testflight: testflight
+        )
     }
 }
 
@@ -49,10 +67,18 @@ struct BranchCommand: ParsableCommand {
     @Option(name: .long, help: "Base branch for the diff (defaults to gate.yml base_branch).")
     var base: String = ""
     @Flag(name: .long, help: "Run unit tests only (skip UI tests).") var noUI = false
+    @Flag(name: .long, help: "After a green gate, build an unsigned archive.") var archive = false
+    @Flag(name: .long, help: "After a green gate, upload to TestFlight via fastlane.") var testflight = false
     @OptionGroup var common: CommonOptions
 
     func run() throws {
-        try CommandSupport.execute(common: common, scope: .branch(base: base), unitOnly: noUI)
+        try CommandSupport.execute(
+            common: common,
+            scope: .branch(base: base),
+            unitOnly: noUI,
+            archive: archive,
+            testflight: testflight
+        )
     }
 }
 
@@ -62,9 +88,17 @@ struct StagedCommand: ParsableCommand {
         abstract: "Gate the screens with staged changes (pre-commit)."
     )
     @Flag(name: .long, help: "Run unit tests only (skip UI tests).") var noUI = false
+    @Flag(name: .long, help: "After a green gate, build an unsigned archive.") var archive = false
+    @Flag(name: .long, help: "After a green gate, upload to TestFlight via fastlane.") var testflight = false
     @OptionGroup var common: CommonOptions
 
     func run() throws {
-        try CommandSupport.execute(common: common, scope: .staged, unitOnly: noUI)
+        try CommandSupport.execute(
+            common: common,
+            scope: .staged,
+            unitOnly: noUI,
+            archive: archive,
+            testflight: testflight
+        )
     }
 }
