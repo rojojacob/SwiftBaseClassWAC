@@ -8,7 +8,7 @@ struct Gate: ParsableCommand {
         subcommands: [
             All.self, ScreenCommand.self, ScreensCommand.self, BranchCommand.self,
             StagedCommand.self, FormatCommand.self, LintCommand.self, VerifyStampCommand.self,
-            AuditCommand.self
+            AuditCommand.self, ArchiveCommand.self, TestFlightCommand.self
         ],
         defaultSubcommand: All.self
     )
