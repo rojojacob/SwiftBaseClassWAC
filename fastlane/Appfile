@@ -2,7 +2,7 @@
 # Fill these in (or supply via environment variables / CI secrets).
 # Docs: https://docs.fastlane.tools/advanced/Appfile/
 
-app_identifier("com.wac.Swift-Base-Class-WAC")   # The app's Bundle ID
+app_identifier("com.wac.SwiftBaseClassWAC")   # The app's Bundle ID
 apple_id(ENV["FASTLANE_APPLE_ID"])               # Your Apple Developer account email
 team_id("T92Y92RB48")                            # Developer Portal team ID
 # itc_team_id("XXXXXXX")                          # App Store Connect team ID (if you belong to several)

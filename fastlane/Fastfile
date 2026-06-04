@@ -9,8 +9,8 @@
 
 default_platform(:ios)
 
-SCHEME = "Swift Base Class WAC"
-PROJECT = "Swift Base Class WAC/Swift Base Class WAC.xcodeproj"
+SCHEME = "SwiftBaseClassWAC"
+PROJECT = "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj"
 
 platform :ios do
   desc "Run the full test suite (mirrors CI)"

@@ -1,6 +1,6 @@
 //
 //  CounterUITests.swift
-//  Swift Base Class WACUITests
+//  SwiftBaseClassWACUITests
 //
 //  Critical-flow UI test driving the Counter screen via accessibility
 //  identifiers. UI tests use XCUITest (XCTest), not Swift Testing.

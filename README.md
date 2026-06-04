@@ -1,4 +1,4 @@
-# Swift Base Class WAC
+# SwiftBaseClassWAC
 
 A SwiftUI app skeleton wired for quality from commit one: SwiftLint + SwiftFormat,
 a Lefthook pre-commit gate, an MVVM sample feature with unit + UI tests, and a
@@ -7,16 +7,16 @@ fail-fast CI/CD pipeline. Built to mirror the full iOS release pipeline.
 - **Min iOS:** 17.0 (enables the `@Observable` macro)
 - **Language:** Swift 5 mode (Xcode 26)
 - **Architecture:** MVVM with `@Observable` view models
-- **Bundle ID:** `com.wac.Swift-Base-Class-WAC`
+- **Bundle ID:** `com.wac.SwiftBaseClassWAC`
 
 ---
 
 ## Project layout
 
 ```
-Swift Base Class WAC/
-  Swift Base Class WAC.xcodeproj
-  Swift Base Class WAC/            # app target (synchronized folder group)
+SwiftBaseClassWAC/
+  SwiftBaseClassWAC.xcodeproj
+  SwiftBaseClassWAC/            # app target (synchronized folder group)
     App/                           # entry point + composition root (RootView)
     Features/                      # one folder per feature
       Counter/                     #   sample MVVM vertical: View + ViewModel + Model
@@ -24,8 +24,8 @@ Swift Base Class WAC/
       Networking/                  #   APIClient abstraction
     DesignSystem/                  # tokens (spacing/color/typography) + components
     Resources/                     # Assets.xcassets
-  Swift Base Class WACTests/       # unit tests (Swift Testing)
-  Swift Base Class WACUITests/     # UI tests (XCUITest)
+  SwiftBaseClassWACTests/       # unit tests (Swift Testing)
+  SwiftBaseClassWACUITests/     # UI tests (XCUITest)
 .github/workflows/ci.yml           # CI: lint -> test -> archive (fail fast)
 fastlane/                          # signing + TestFlight + App Store lanes
 .swiftlint.yml  .swiftformat  lefthook.yml
@@ -52,7 +52,7 @@ lefthook install
 bundle install
 ```
 
-Open `Swift Base Class WAC/Swift Base Class WAC.xcodeproj`, then **⌘R** to run and
+Open `SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj`, then **⌘R** to run and
 **⌘U** to test.
 
 ---
@@ -88,14 +88,14 @@ swiftlint lint --strict     # lint; warnings are errors
 ## Testing
 
 - **Unit tests** use the **Swift Testing** framework (`@Test`, `#expect`) and
-  `@testable import Swift_Base_Class_WAC`.
+  `@testable import SwiftBaseClassWAC`.
 - **UI tests** use **XCUITest**, driving the UI through accessibility identifiers
   (e.g. `counter.value`, `counter.increment`).
 
 ```bash
 xcodebuild test \
-  -project "Swift Base Class WAC/Swift Base Class WAC.xcodeproj" \
-  -scheme "Swift Base Class WAC" \
+  -project "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj" \
+  -scheme "SwiftBaseClassWAC" \
   -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
@@ -126,7 +126,7 @@ A broken lint stops the pipeline before the expensive build ever runs.
 
 ### Phase 4 — Signing & provisioning (once per environment)
 - [ ] Certificates: generate a CSR in Keychain Access → upload to Apple → install the `.cer`.
-- [ ] App ID: register `com.wac.Swift-Base-Class-WAC`; enable needed capabilities.
+- [ ] App ID: register `com.wac.SwiftBaseClassWAC`; enable needed capabilities.
 - [ ] Provisioning profile: link App ID + certificate; add device UDIDs for dev builds.
 - [ ] Xcode: select Team, enable Automatic Signing for dev, add matching Capabilities.
 - [ ] **Teams:** prefer `fastlane match` to sync signing assets via a private repo.

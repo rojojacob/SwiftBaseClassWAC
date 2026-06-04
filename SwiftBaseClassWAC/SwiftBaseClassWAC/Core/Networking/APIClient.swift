@@ -1,6 +1,6 @@
 //
 //  APIClient.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Minimal async networking abstraction. The protocol lets view models
 //  depend on an interface (easy to mock in tests) rather than URLSession.

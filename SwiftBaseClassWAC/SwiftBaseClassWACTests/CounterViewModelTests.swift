@@ -1,13 +1,13 @@
 //
 //  CounterViewModelTests.swift
-//  Swift Base Class WACTests
+//  SwiftBaseClassWACTests
 //
 //  Unit tests for the Counter view model. @MainActor because the view
 //  model is main-actor isolated.
 //
 
 import Testing
-@testable import Swift_Base_Class_WAC
+@testable import SwiftBaseClassWAC
 
 @MainActor
 struct CounterViewModelTests {
