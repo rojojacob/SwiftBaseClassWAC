@@ -41,4 +41,34 @@ final class CounterUITests: XCTestCase {
         app.buttons["counter.reset"].tap()
         assertLabel(value, becomes: "0")
     }
+
+    /// Documents the Counter's edge behavior as-is (the feature is reference
+    /// scaffolding, intentionally left unchanged): Reset is disabled at zero, the
+    /// value has no floor and goes negative, and Reset re-enables once it differs
+    /// from zero.
+    @MainActor
+    func testEdgeStatesNegativeAndDisabledReset() {
+        let app = XCUIApplication()
+        app.launch()
+        app.buttons["home.counter"].tapWhenReady()
+
+        let value = app.staticTexts["counter.value"]
+        XCTAssertTrue(value.waitForExistence(timeout: 5))
+        assertLabel(value, becomes: "0")
+        // Edge: Reset is non-interactive while the value is zero.
+        XCTAssertFalse(app.buttons["counter.reset"].isEnabled, "Reset should be disabled at 0")
+
+        // Edge: the counter has no floor — decrementing past zero goes negative.
+        app.buttons["counter.decrement"].tap()
+        assertLabel(value, becomes: "-1")
+        XCTAssertTrue(app.buttons["counter.reset"].isEnabled, "Reset should enable once value != 0")
+        app.buttons["counter.decrement"].tap()
+        assertLabel(value, becomes: "-2")
+        attachScreenshot(of: app, named: "Counter-Negative")
+
+        // Reset returns to zero and disables again.
+        app.buttons["counter.reset"].tap()
+        assertLabel(value, becomes: "0")
+        XCTAssertFalse(app.buttons["counter.reset"].isEnabled, "Reset should disable again at 0")
+    }
 }

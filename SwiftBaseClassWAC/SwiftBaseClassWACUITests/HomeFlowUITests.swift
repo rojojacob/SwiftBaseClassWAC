@@ -39,7 +39,7 @@ final class HomeFlowUITests: XCTestCase {
         let counterRow = app.buttons["home.counter"]
         XCTAssertTrue(counterRow.waitForExistence(timeout: 10), "Home screen never appeared")
         XCTAssertTrue(app.buttons["home.posts"].exists, "Posts row missing on Home")
-        capture(app, named: "01-Home")
+        attachScreenshot(of: app, named: "01-Home")
     }
 
     @MainActor
@@ -48,7 +48,7 @@ final class HomeFlowUITests: XCTestCase {
         let value = app.staticTexts["counter.value"]
         XCTAssertTrue(value.waitForExistence(timeout: 5), "Counter screen never appeared")
         assertLabel(value, becomes: "0")
-        capture(app, named: "02-Counter")
+        attachScreenshot(of: app, named: "02-Counter")
         app.navigationBars.buttons.element(boundBy: 0).tap() // back to Home
     }
 
@@ -57,22 +57,13 @@ final class HomeFlowUITests: XCTestCase {
         app.buttons["home.posts"].tapWhenReady()
         XCTAssertTrue(app.navigationBars["Posts"].waitForExistence(timeout: 5), "Posts screen never appeared")
         XCTAssertTrue(app.staticTexts["First post"].waitForExistence(timeout: 5), "Stubbed posts never loaded")
-        capture(app, named: "03-Posts")
+        attachScreenshot(of: app, named: "03-Posts")
     }
 
     @MainActor
     private func assertPostDetail(_ app: XCUIApplication) {
         app.cells.firstMatch.tap()
         XCTAssertTrue(app.navigationBars["Post #1"].waitForExistence(timeout: 5), "Post detail never appeared")
-        capture(app, named: "04-PostDetail")
-    }
-
-    /// Attaches a full-app screenshot to the test result, kept regardless of pass/fail.
-    @MainActor
-    private func capture(_ app: XCUIApplication, named name: String) {
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = name
-        attachment.lifetime = .keepAlways
-        add(attachment)
+        attachScreenshot(of: app, named: "04-PostDetail")
     }
 }

@@ -45,4 +45,14 @@ extension XCTestCase {
             line: line
         )
     }
+
+    /// Attaches a full-app screenshot to the test result, kept regardless of
+    /// pass/fail — turns a UI run into a visual record of every screen it visits.
+    @MainActor
+    func attachScreenshot(of app: XCUIApplication, named name: String) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
 }
