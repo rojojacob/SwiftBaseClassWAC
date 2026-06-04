@@ -28,6 +28,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3"
+          bundler: "2.5.23"
           bundler-cache: true
 
       - name: Configure SSH for match (read-only deploy key)
