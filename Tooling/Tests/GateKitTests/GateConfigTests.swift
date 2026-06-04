@@ -71,6 +71,31 @@ stages: [format, lint, build, test]
     #expect(makeTestConfig().thresholds == nil)
 }
 
+@Test func parsesOptionalReleaseBlock() throws {
+    let yaml = """
+    project: App/App.xcodeproj
+    scheme: App
+    targets: { app: App, unit: AppTests, ui: AppUITests }
+    simulator: "iPhone 16 Pro"
+    base_branch: main
+    conventions:
+      features_dir: App/App/Features
+      unit_dir: App/AppTests
+      ui_dir: App/AppUITests
+      test_glob: "{Name}*Tests.swift"
+      shared_dirs: [Core]
+    stages: [format, lint, test]
+    release: { archive_path: build/App.xcarchive, testflight_lane: beta }
+    """
+    let config = try GateConfig.parse(yaml)
+    #expect(config.release?.archivePath == "build/App.xcarchive")
+    #expect(config.release?.testflightLane == "beta")
+}
+
+@Test func releaseIsOptional() {
+    #expect(makeTestConfig().release == nil)
+}
+
 @Test func thresholdsPresentButMissingHealthMinFailsDecode() {
     // Contract: if you write `thresholds:`, `health_min` is required (it's non-optional).
     let yaml = """

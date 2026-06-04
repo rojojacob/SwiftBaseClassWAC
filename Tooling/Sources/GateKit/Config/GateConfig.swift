@@ -31,6 +31,16 @@ public struct GateThresholds: Codable, Equatable, Sendable {
     }
 }
 
+public struct GateRelease: Codable, Equatable, Sendable {
+    public let archivePath: String?
+    public let testflightLane: String?
+
+    enum CodingKeys: String, CodingKey {
+        case archivePath = "archive_path"
+        case testflightLane = "testflight_lane"
+    }
+}
+
 public struct GateConfig: Codable, Equatable, Sendable {
     public let project: String
     public let scheme: String
@@ -40,9 +50,10 @@ public struct GateConfig: Codable, Equatable, Sendable {
     public let conventions: GateConventions
     public let stages: [String]
     public let thresholds: GateThresholds?
+    public let release: GateRelease?
 
     enum CodingKeys: String, CodingKey {
-        case project, scheme, targets, simulator, conventions, stages, thresholds
+        case project, scheme, targets, simulator, conventions, stages, thresholds, release
         case baseBranch = "base_branch"
     }
 }
