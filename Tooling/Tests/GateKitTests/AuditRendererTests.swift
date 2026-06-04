@@ -37,5 +37,25 @@ private func sampleReport() -> AuditReport {
 @Test func githubAnnotationsUseErrorForHighPlusAndWarningBelow() {
     let lines = AuditRenderer.githubAnnotations(sampleReport())
     #expect(lines.contains { $0.hasPrefix("::error file=App/AView.swift,line=2") }) // critical → error
-    #expect(lines.contains { $0.hasPrefix("::warning file=App/BModel.swift") }) // low → warning
+    let lowLine = try? #require(lines.first { $0.contains("App/BModel.swift") })
+    #expect(lowLine?.hasPrefix("::warning file=App/BModel.swift") == true) // low → warning
+    #expect(lowLine?.contains("line=") == false) // nil line → no line= parameter
+}
+
+@Test func githubAnnotationsEncodeNewlinesAndCommas() {
+    let report = AuditReport(findings: [
+        AuditFinding(
+            severity: .high,
+            file: "App/X.swift",
+            line: 1,
+            ruleID: "r",
+            title: "Has, comma",
+            detail: "line1\nline2",
+            fix: "f"
+        )
+    ])
+    let line = AuditRenderer.githubAnnotations(report).first ?? ""
+    #expect(line.contains("\n") == false) // no raw newline corrupts the annotation
+    #expect(line.contains("%0A")) // newline encoded
+    #expect(line.contains("title=Has%2C comma")) // comma in title encoded
 }

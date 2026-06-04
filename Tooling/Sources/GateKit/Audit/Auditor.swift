@@ -24,8 +24,23 @@ public struct Auditor {
         return AuditReport(findings: findings)
     }
 
+    /// A missing tool surfaces as a high-severity finding (lowering the health score)
+    /// rather than silently reporting zero violations — a false "clean".
+    private func toolMissingFinding(_ tool: String) -> AuditFinding {
+        AuditFinding(
+            severity: .high,
+            file: "(toolchain)",
+            line: nil,
+            ruleID: "audit_tool",
+            title: "\(tool) not installed",
+            detail: "The \(tool) scan was skipped because \(tool) is not on PATH.",
+            fix: "Install it (e.g. `brew install \(tool)`) and re-run `gate audit`."
+        )
+    }
+
     private func lintFindings() throws -> [AuditFinding] {
         let result = try runner.run(["swiftlint", "lint", "--reporter", "json", "--quiet"], cwd: repoRoot)
+        if result.exitCode == 127 { return [toolMissingFinding("swiftlint")] } // command not found
         let data = Data(result.stdout.utf8)
         guard !data.isEmpty else { return [] }
         return (try? SwiftLintJSON.findings(fromJSON: data, repoRoot: repoRoot.path)) ?? []
@@ -33,6 +48,7 @@ public struct Auditor {
 
     private func formatDriftFindings() throws -> [AuditFinding] {
         let result = try runner.run(["swiftformat", "--lint", "."], cwd: repoRoot)
+        if result.exitCode == 127 { return [toolMissingFinding("swiftformat")] } // command not found
         if result.succeeded { return [] }
         let prefix = repoRoot.path.hasSuffix("/") ? repoRoot.path : repoRoot.path + "/"
         // Each drift line starts with a file path; collect distinct files.
