@@ -1,0 +1,16 @@
+# gate.yml — single source of truth for the gate engine (see docs/superpowers/specs/2026-06-04-wac-ios-standard-design.md)
+project: SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj
+scheme: SwiftBaseClassWAC
+targets:
+  app: SwiftBaseClassWAC
+  unit: SwiftBaseClassWACTests
+  ui: SwiftBaseClassWACUITests
+simulator: "iPhone 16"
+base_branch: main
+conventions:
+  features_dir: SwiftBaseClassWAC/SwiftBaseClassWAC/Features
+  unit_dir: SwiftBaseClassWAC/SwiftBaseClassWACTests
+  ui_dir: SwiftBaseClassWAC/SwiftBaseClassWACUITests
+  test_glob: "{Name}*Tests.swift"
+  shared_dirs: [Core, DesignSystem]
+stages: [format, lint, build, test]

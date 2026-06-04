@@ -91,3 +91,6 @@ Gemfile.lock
 
 # xcconfig secrets (real file is local-only)
 SwiftBaseClassWAC/Config/Secrets.xcconfig
+
+# gate engine (SwiftPM build artifacts)
+Tooling/.build/
