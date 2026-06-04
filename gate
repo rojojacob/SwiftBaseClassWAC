@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Thin wrapper so callers run `./gate <scope>` instead of the full swift invocation.
-# Builds once, then forwards all arguments to the gate CLI.
+# Builds if needed, then forwards all arguments to the gate CLI.
+# cd to the repo root (where this script and gate.yml live) so the gate resolves
+# its config and scopes paths from there no matter where it was invoked from.
 set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$DIR"
 exec swift run --package-path "$DIR/Tooling" gate "$@"

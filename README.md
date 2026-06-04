@@ -169,7 +169,7 @@ The `gate` CLI (Swift package in `Tooling/`) runs the same quality pipeline,
 scoped to what you're working on:
 
 ```bash
-./gate screen Counter      # one screen: lint + that screen's unit & UI tests
+./gate screen Counter      # one screen: format + lint, then that screen's unit & UI tests
 ./gate screens Counter Posts
 ./gate branch              # only the screens changed vs. main
 ./gate all                 # whole repo (format → lint → build → test)
