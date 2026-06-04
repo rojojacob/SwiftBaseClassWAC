@@ -3,12 +3,12 @@ import Foundation
 import GateKit
 
 enum CommandSupport {
-    static func execute(common: CommonOptions, scope rawScope: ScopeKind) throws {
+    static func execute(common: CommonOptions, scope rawScope: ScopeKind, unitOnly: Bool = false) throws {
         let cwd = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
         let configURL = URL(fileURLWithPath: common.config, relativeTo: cwd)
         let gate = try GateRunner.live(configPath: configURL, repoRoot: cwd)
         let scope = applyDefaults(rawScope, config: gate.config)
-        let report = try gate.run(scope)
+        let report = try gate.run(scope, unitOnly: unitOnly)
         printReport(report)
         if !report.passed { throw ExitCode.failure }
     }
