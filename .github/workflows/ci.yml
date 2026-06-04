@@ -154,7 +154,7 @@ jobs:
       - name: Install SwiftLint & SwiftFormat
         run: brew install swiftlint swiftformat
       - name: gate audit (annotate + report)
-        run: ./gate audit --annotate
+        run: ./gate audit --annotate --report GATE_REPORT.md
       - name: Upload GATE_REPORT.md
         if: always()
         uses: actions/upload-artifact@v7

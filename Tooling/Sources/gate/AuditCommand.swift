@@ -18,8 +18,16 @@ struct AuditCommand: ParsableCommand {
         let runner = SystemCommandRunner()
 
         if fix {
-            _ = try? runner.run(["swiftformat", "."], cwd: cwd)
-            _ = try? runner.run(["swiftlint", "--fix", "--quiet"], cwd: cwd)
+            // Best-effort, deterministic-safe fixes only; surface (not swallow) a no-op
+            // so the user knows the tool was missing. The audit below still flags it.
+            let fmt = try? runner.run(["swiftformat", "."], cwd: cwd)
+            if fmt?.succeeded != true {
+                print("Note: swiftformat --fix had no effect (tool missing or error).")
+            }
+            let lnt = try? runner.run(["swiftlint", "--fix", "--quiet"], cwd: cwd)
+            if lnt?.succeeded != true {
+                print("Note: swiftlint --fix had no effect (tool missing or error).")
+            }
         }
 
         let configURL = URL(fileURLWithPath: common.config, relativeTo: cwd)
@@ -32,8 +40,13 @@ struct AuditCommand: ParsableCommand {
         )
         let result = try auditor.audit()
 
-        let markdown = AuditRenderer.markdown(result, topN: 10)
-        try? markdown.write(toFile: report, atomically: true, encoding: .utf8)
+        // Create the report's parent dir so `--report sub/dir/x.md` doesn't silently no-op.
+        let reportURL = URL(fileURLWithPath: report, relativeTo: cwd)
+        try? FileManager.default.createDirectory(
+            at: reportURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+        )
+        try? AuditRenderer.markdown(result, topN: 10).write(to: reportURL, atomically: true, encoding: .utf8)
 
         if annotate {
             for line in AuditRenderer.githubAnnotations(result) {
@@ -42,9 +55,15 @@ struct AuditCommand: ParsableCommand {
         }
         print("Audit: health \(result.healthScore)/100, \(result.findings.count) finding(s) → \(report)")
 
-        if enforce, let minimum = config.thresholds?.healthMin, result.healthScore < minimum {
-            print("✘ health \(result.healthScore) below required \(minimum)")
-            throw ExitCode.failure
+        if enforce {
+            guard let minimum = config.thresholds?.healthMin else {
+                print("Note: --enforce had no effect — add `thresholds.health_min` to gate.yml.")
+                return
+            }
+            if result.healthScore < minimum {
+                print("✘ health \(result.healthScore) below required \(minimum)")
+                throw ExitCode.failure
+            }
         }
     }
 }
