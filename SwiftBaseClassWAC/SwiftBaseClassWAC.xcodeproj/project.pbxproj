@@ -166,6 +166,7 @@
 			buildConfigurationList = F3FD57742FD105AA00730A7E /* Build configuration list for PBXNativeTarget "SwiftBaseClassWAC" */;
 			buildPhases = (
 				C100000000000000000000C1 /* SwiftLint */,
+				C200000000000000000000C2 /* Gate verify-stamp */,
 				F3FD57652FD105A900730A7E /* Sources */,
 				F3FD57662FD105A900730A7E /* Frameworks */,
 				F3FD57672FD105A900730A7E /* Resources */,
@@ -271,6 +272,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Linting runs in a dedicated CI job; skip the in-build phase there.\nif [ -n \"$CI\" ]; then\n  echo \"note: SwiftLint build phase skipped in CI (linted in a dedicated job)\"\n  exit 0\nfi\nexport PATH=\"$PATH:/opt/homebrew/bin:/usr/local/bin\"\nif command -v swiftlint >/dev/null 2>&1; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed — run 'brew install swiftlint'\"\nfi\n";
+		};
+		C200000000000000000000C2 /* Gate verify-stamp */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Gate verify-stamp";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Stuck-until-green guard: fail the build if a screen changed since its last green gate.\nif [ -n \"$CI\" ]; then exit 0; fi\nif [ \"$GATE_SKIP_STAMP\" = \"1\" ]; then echo \"warning: gate verify-stamp skipped (GATE_SKIP_STAMP=1)\"; exit 0; fi\nGATE=\"$SRCROOT/../gate\"\nif [ ! -x \"$GATE\" ]; then echo \"warning: ./gate not found at $GATE — skipping stamp check\"; exit 0; fi\n\"$GATE\" verify-stamp || { echo \"error: gate verify-stamp failed — run the gate for the changed screen(s) to re-green\"; exit 1; }\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
