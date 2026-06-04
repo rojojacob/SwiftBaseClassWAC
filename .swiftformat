@@ -27,4 +27,4 @@
 --organizetypes class,struct,enum,extension
 
 # Excluded paths
---exclude .build,DerivedData,**/Generated,fastlane,Pods,Carthage
+--exclude .build,DerivedData,**/Generated,fastlane,vendor,Pods,Carthage

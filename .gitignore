@@ -73,6 +73,13 @@ fastlane/.env
 *.log
 
 # ---------------------------------------------------------------------------
+# Ruby / Bundler (fastlane)
+# ---------------------------------------------------------------------------
+vendor/
+.bundle/cache/
+# Gemfile.lock and .bundle/config ARE committed for reproducible installs.
+
+# ---------------------------------------------------------------------------
 # Editor / assistant local settings
 # ---------------------------------------------------------------------------
 .claude/settings.local.json
