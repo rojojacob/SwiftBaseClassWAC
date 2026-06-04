@@ -1,0 +1,9 @@
+// Shared.xcconfig
+// Settings common to every environment. Per-environment files #include this.
+// Note: xcconfig treats `//` as a comment, so URLs are stored WITHOUT a scheme
+// (e.g. api.example.com); AppConfiguration prepends https:// at runtime.
+
+#include? "Secrets.xcconfig"
+
+// Surface custom values to the runtime via the (partial) Info.plist.
+// (Defined per-environment below; listed here for documentation.)

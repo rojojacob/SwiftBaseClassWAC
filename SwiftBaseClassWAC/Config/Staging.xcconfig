@@ -1,0 +1,7 @@
+// Staging.xcconfig — for a Staging build configuration.
+// To enable: duplicate the Release configuration as "Staging" in Xcode
+// (Project ▸ Info ▸ Configurations) and set its xcconfig to this file.
+#include "Shared.xcconfig"
+
+APP_ENVIRONMENT = staging
+API_BASE_URL = staging-api.example.com

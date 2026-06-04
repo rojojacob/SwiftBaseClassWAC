@@ -4,6 +4,7 @@
 //
 //  Critical-flow UI test driving the Counter screen via accessibility
 //  identifiers. UI tests use XCUITest (XCTest), not Swift Testing.
+//  Shared helpers (`tapWhenReady`, `assertLabel`) live in XCUIHelpers.swift.
 //
 
 import XCTest
@@ -17,6 +18,9 @@ final class CounterUITests: XCTestCase {
     func testIncrementAndResetFlow() {
         let app = XCUIApplication()
         app.launch()
+
+        // Navigate from Home into the Counter feature.
+        app.buttons["home.counter"].tapWhenReady()
 
         let value = app.staticTexts["counter.value"]
         XCTAssertTrue(value.waitForExistence(timeout: 5))
@@ -36,26 +40,5 @@ final class CounterUITests: XCTestCase {
 
         app.buttons["counter.reset"].tap()
         assertLabel(value, becomes: "0")
-    }
-
-    /// Waits (up to `timeout`) for `element`'s label to equal `expected`,
-    /// failing only if it never settles. Robust against UI animations.
-    private func assertLabel(
-        _ element: XCUIElement,
-        becomes expected: String,
-        timeout: TimeInterval = 5,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) {
-        let predicate = NSPredicate(format: "label == %@", expected)
-        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
-        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-        XCTAssertEqual(
-            result,
-            .completed,
-            "Expected label \"\(expected)\" but got \"\(element.label)\"",
-            file: file,
-            line: line
-        )
     }
 }
