@@ -1,6 +1,6 @@
 //
 //  AppTheme.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Centralized design tokens: spacing, colors, and typography.
 //  Reference these everywhere instead of hard-coded literals so the

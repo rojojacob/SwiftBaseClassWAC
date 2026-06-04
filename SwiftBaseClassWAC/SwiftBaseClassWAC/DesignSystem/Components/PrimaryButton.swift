@@ -1,6 +1,6 @@
 //
 //  PrimaryButton.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Reusable primary call-to-action button built from design tokens.
 //

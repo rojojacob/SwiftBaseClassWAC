@@ -1,6 +1,6 @@
 //
 //  CounterModel.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Plain value type representing the feature's domain state.
 //

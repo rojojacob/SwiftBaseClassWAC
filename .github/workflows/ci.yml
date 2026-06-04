@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SCHEME: "Swift Base Class WAC"
-  PROJECT: "Swift Base Class WAC/Swift Base Class WAC.xcodeproj"
+  SCHEME: "SwiftBaseClassWAC"
+  PROJECT: "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj"
   # A simulator that exists on the runner image; adjust if the image changes.
   DESTINATION: "platform=iOS Simulator,name=iPhone 16"
 

@@ -1,12 +1,12 @@
 //
 //  CounterModelTests.swift
-//  Swift Base Class WACTests
+//  SwiftBaseClassWACTests
 //
 //  Unit tests for the domain model using the Swift Testing framework.
 //
 
 import Testing
-@testable import Swift_Base_Class_WAC
+@testable import SwiftBaseClassWAC
 
 struct CounterModelTests {
     @Test func startsAtZeroByDefault() {

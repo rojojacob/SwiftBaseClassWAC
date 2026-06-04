@@ -1,6 +1,6 @@
 //
 //  RootView.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Top-level navigation host. Wire feature entry points here.
 //

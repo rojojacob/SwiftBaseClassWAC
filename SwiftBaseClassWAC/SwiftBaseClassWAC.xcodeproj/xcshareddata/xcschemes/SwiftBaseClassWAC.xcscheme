@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F3FD57682FD105A900730A7E"
-               BuildableName = "Swift Base Class WAC.app"
-               BlueprintName = "Swift Base Class WAC"
-               ReferencedContainer = "container:Swift Base Class WAC.xcodeproj">
+               BuildableName = "SwiftBaseClassWAC.app"
+               BlueprintName = "SwiftBaseClassWAC"
+               ReferencedContainer = "container:SwiftBaseClassWAC.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A100000000000000000000A1"
-               BuildableName = "Swift Base Class WACTests.xctest"
-               BlueprintName = "Swift Base Class WACTests"
-               ReferencedContainer = "container:Swift Base Class WAC.xcodeproj">
+               BuildableName = "SwiftBaseClassWACTests.xctest"
+               BlueprintName = "SwiftBaseClassWACTests"
+               ReferencedContainer = "container:SwiftBaseClassWAC.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B100000000000000000000B1"
-               BuildableName = "Swift Base Class WACUITests.xctest"
-               BlueprintName = "Swift Base Class WACUITests"
-               ReferencedContainer = "container:Swift Base Class WAC.xcodeproj">
+               BuildableName = "SwiftBaseClassWACUITests.xctest"
+               BlueprintName = "SwiftBaseClassWACUITests"
+               ReferencedContainer = "container:SwiftBaseClassWAC.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F3FD57682FD105A900730A7E"
-            BuildableName = "Swift Base Class WAC.app"
-            BlueprintName = "Swift Base Class WAC"
-            ReferencedContainer = "container:Swift Base Class WAC.xcodeproj">
+            BuildableName = "SwiftBaseClassWAC.app"
+            BlueprintName = "SwiftBaseClassWAC"
+            ReferencedContainer = "container:SwiftBaseClassWAC.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -82,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F3FD57682FD105A900730A7E"
-            BuildableName = "Swift Base Class WAC.app"
-            BlueprintName = "Swift Base Class WAC"
-            ReferencedContainer = "container:Swift Base Class WAC.xcodeproj">
+            BuildableName = "SwiftBaseClassWAC.app"
+            BlueprintName = "SwiftBaseClassWAC"
+            ReferencedContainer = "container:SwiftBaseClassWAC.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

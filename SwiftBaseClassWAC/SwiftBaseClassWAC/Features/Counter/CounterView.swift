@@ -1,6 +1,6 @@
 //
 //  CounterView.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Sample vertical feature demonstrating the MVVM + @Observable pattern,
 //  DesignSystem usage, and accessibility identifiers for UI testing.

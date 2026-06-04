@@ -1,6 +1,6 @@
 //
 //  CounterViewModel.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWAC
 //
 //  Observable view model (iOS 17+ @Observable macro) holding presentation
 //  logic for the Counter feature. Views observe this; it owns the model.

@@ -1,6 +1,6 @@
 //
-//  Swift_Base_Class_WACApp.swift
-//  Swift Base Class WAC
+//  SwiftBaseClassWACApp.swift
+//  SwiftBaseClassWAC
 //
 //  App entry point and app-level composition root.
 //
