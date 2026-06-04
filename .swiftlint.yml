@@ -7,6 +7,7 @@ disabled_rules:
   - trailing_whitespace        # handled by SwiftFormat
 
 opt_in_rules:
+  # ── existing ──
   - empty_count
   - force_unwrapping
   - explicit_init
@@ -20,6 +21,30 @@ opt_in_rules:
   - operator_usage_whitespace
   - vertical_whitespace_closing_braces
   - multiline_arguments
+  # ── Phase 2B: stricter standard ──
+  # omitted: file_name — flags AppTheme.swift, OnFirstAppear.swift, ErrorAlert.swift,
+  #   HTTPStatus.swift, Codable+RawRepresentable.swift (multi-type / extension-pattern files
+  #   throughout app + Tooling); file_name.excluded can't exclude by file path, only by
+  #   type-name pattern, so there is no non-disruptive way to keep it green without
+  #   splitting/renaming every intentionally grouped file.
+  - fatal_error_message           # fatalError must explain why
+  - empty_string                  # `x.isEmpty` not `x == ""`
+  - empty_collection_literal      # `x.isEmpty` not `x == []`
+  - flatmap_over_map_reduce
+  - joined_default_parameter
+  - legacy_random
+  - lower_acl_than_parent
+  - modifier_order                # consistent @MainActor/public/final ordering
+  - prefer_self_in_static_references
+  - redundant_type_annotation
+  - unneeded_parentheses_in_closure_argument
+  - vertical_parameter_alignment_on_call
+  - yoda_condition
+  - implicitly_unwrapped_optional # no `T!` ivars
+  - private_action
+  - private_outlet
+  - overridden_super_call
+  - prohibited_super_call
 
 analyzer_rules:
   - unused_declaration

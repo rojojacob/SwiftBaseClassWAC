@@ -37,8 +37,8 @@ struct Endpoint {
         body: some Encodable,
         encoder: JSONEncoder = JSONEncoder(),
         queryItems: [URLQueryItem] = []
-    ) throws -> Endpoint {
-        var endpoint = Endpoint(path: path, method: method, queryItems: queryItems)
+    ) throws -> Self {
+        var endpoint = Self(path: path, method: method, queryItems: queryItems)
         endpoint.body = try encoder.encode(body)
         endpoint.headers["Content-Type"] = "application/json"
         return endpoint

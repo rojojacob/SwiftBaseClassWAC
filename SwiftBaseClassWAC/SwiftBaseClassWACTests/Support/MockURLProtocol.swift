@@ -46,7 +46,7 @@ final class MockURLProtocol: URLProtocol {
     }
 
     override func startLoading() {
-        guard let handler = MockURLProtocol.requestHandler else {
+        guard let handler = Self.requestHandler else {
             client?.urlProtocol(self, didFailWithError: URLError(.unsupportedURL))
             return
         }

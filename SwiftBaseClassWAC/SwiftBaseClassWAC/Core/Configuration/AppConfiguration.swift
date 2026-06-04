@@ -17,7 +17,7 @@ enum AppEnvironment: String {
     /// The environment baked into this build (from Info.plist `APP_ENVIRONMENT`).
     static let current: AppEnvironment = {
         let raw = Bundle.main.infoValue(for: "APP_ENVIRONMENT") ?? ""
-        return AppEnvironment(rawValue: raw.lowercased()) ?? .development
+        return Self(rawValue: raw.lowercased()) ?? .development
     }()
 
     var isProduction: Bool {
@@ -38,7 +38,7 @@ struct AppConfiguration {
             .flatMap { URL(string: $0.addingHTTPSchemeIfMissing) }
             ?? URL(string: "https://api.example.com")
             ?? URL(fileURLWithPath: "/")
-        return AppConfiguration(environment: environment, apiBaseURL: baseURL)
+        return Self(environment: environment, apiBaseURL: baseURL)
     }()
 }
 

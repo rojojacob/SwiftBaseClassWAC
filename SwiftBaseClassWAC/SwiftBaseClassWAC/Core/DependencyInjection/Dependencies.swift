@@ -25,7 +25,7 @@ struct Dependencies {
     static let live: Dependencies = {
         #if DEBUG
             if let stub = UITestStubAPIClient.fromLaunchArguments() {
-                return Dependencies(apiClient: stub, keychain: KeychainStore(), logger: .app)
+                return Self(apiClient: stub, keychain: KeychainStore(), logger: .app)
             }
         #endif
         let keychain = KeychainStore()
@@ -37,7 +37,7 @@ struct Dependencies {
             baseURL: AppConfiguration.current.apiBaseURL,
             interceptors: interceptors
         )
-        return Dependencies(apiClient: apiClient, keychain: keychain, logger: .app)
+        return Self(apiClient: apiClient, keychain: keychain, logger: .app)
     }()
 }
 
@@ -79,11 +79,11 @@ extension View {
         let postsMode: PostsMode
 
         /// Builds a stub from the process launch arguments, or nil if none apply.
-        static func fromLaunchArguments() -> UITestStubAPIClient? {
+        static func fromLaunchArguments() -> Self? {
             let args = ProcessInfo.processInfo.arguments
-            if args.contains(UITestStubArgument.error) { return UITestStubAPIClient(postsMode: .error) }
-            if args.contains(UITestStubArgument.empty) { return UITestStubAPIClient(postsMode: .empty) }
-            if args.contains(UITestStubArgument.populated) { return UITestStubAPIClient(postsMode: .populated) }
+            if args.contains(UITestStubArgument.error) { return Self(postsMode: .error) }
+            if args.contains(UITestStubArgument.empty) { return Self(postsMode: .empty) }
+            if args.contains(UITestStubArgument.populated) { return Self(postsMode: .populated) }
             return nil
         }
 

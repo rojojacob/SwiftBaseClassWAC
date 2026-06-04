@@ -15,22 +15,22 @@ struct ValidationRule {
     let isValid: @Sendable (String) -> Bool
     let message: String
 
-    static func nonEmpty(_ message: String = "This field is required.") -> ValidationRule {
-        ValidationRule(
+    static func nonEmpty(_ message: String = "This field is required.") -> Self {
+        Self(
             isValid: { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty },
             message: message
         )
     }
 
-    static func minLength(_ length: Int, message: String? = nil) -> ValidationRule {
-        ValidationRule(
+    static func minLength(_ length: Int, message: String? = nil) -> Self {
+        Self(
             isValid: { $0.count >= length },
             message: message ?? "Must be at least \(length) characters."
         )
     }
 
-    static func email(_ message: String = "Enter a valid email address.") -> ValidationRule {
-        ValidationRule(
+    static func email(_ message: String = "Enter a valid email address.") -> Self {
+        Self(
             isValid: { value in
                 let pattern = #"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
                 return value.range(of: pattern, options: .regularExpression) != nil
@@ -39,8 +39,8 @@ struct ValidationRule {
         )
     }
 
-    static func custom(_ message: String, isValid: @escaping @Sendable (String) -> Bool) -> ValidationRule {
-        ValidationRule(isValid: isValid, message: message)
+    static func custom(_ message: String, isValid: @escaping @Sendable (String) -> Bool) -> Self {
+        Self(isValid: isValid, message: message)
     }
 }
 
