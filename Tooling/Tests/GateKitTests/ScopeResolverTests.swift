@@ -29,6 +29,8 @@ private func makeResolver(runner: CommandRunner, finder: FileFinder) -> ScopeRes
     #expect(scope.screens[0].codePath == "App/App/Features/Posts")
     #expect(scope.screens[0].unitTestClasses == ["PostsViewModelTests"])
     #expect(scope.screens[0].uiTestClasses == ["PostsUITests"])
+    #expect(scope.screens[0].unitTestFiles == ["/repo/App/AppTests/Features/PostsViewModelTests.swift"])
+    #expect(scope.screens[0].uiTestFiles == ["/repo/App/AppUITests/PostsUITests.swift"])
 }
 
 @Test func branchMapsChangedFilesToOwningScreens() throws {

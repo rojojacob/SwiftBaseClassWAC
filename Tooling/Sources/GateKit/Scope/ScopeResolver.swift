@@ -71,11 +71,15 @@ public struct ScopeResolver {
         let pattern = config.conventions.testGlob.replacingOccurrences(of: "{Name}", with: name)
         let unitDir = repoRoot.appendingPathComponent(config.conventions.unitDir).path
         let uiDir = repoRoot.appendingPathComponent(config.conventions.uiDir).path
+        let unitFiles = finder.files(in: unitDir, matching: pattern)
+        let uiFiles = finder.files(in: uiDir, matching: pattern)
         return Screen(
             name: name,
             codePath: "\(config.conventions.featuresDir)/\(name)",
-            unitTestClasses: finder.files(in: unitDir, matching: pattern).map(Self.className(fromPath:)),
-            uiTestClasses: finder.files(in: uiDir, matching: pattern).map(Self.className(fromPath:))
+            unitTestClasses: unitFiles.map(Self.className(fromPath:)),
+            uiTestClasses: uiFiles.map(Self.className(fromPath:)),
+            unitTestFiles: unitFiles,
+            uiTestFiles: uiFiles
         )
     }
 
