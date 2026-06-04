@@ -6,7 +6,7 @@ name: iOS CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, Develop]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -79,7 +79,7 @@ jobs:
   archive:
     name: Archive (.ipa)
     needs: test            # only archive once tests are green
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Develop'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
