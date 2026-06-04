@@ -24,3 +24,7 @@ func makeTestConfig() -> GateConfig {
         fatalError("invalid test YAML: \(error)")
     }
 }
+
+func makeContext(runner: CommandRunner) -> GateContext {
+    GateContext(config: makeTestConfig(), runner: runner, repoRoot: URL(fileURLWithPath: "/repo"))
+}
