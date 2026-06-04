@@ -30,6 +30,9 @@ excluded:
   - DerivedData
   - "**/Generated"
   - fastlane
+  - vendor
+  - Pods
+  - Carthage
 
 line_length:
   warning: 120

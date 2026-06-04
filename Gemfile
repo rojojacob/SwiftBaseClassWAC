@@ -5,4 +5,5 @@
 source "https://rubygems.org"
 
 gem "fastlane"
-gem "xcbeautify"   # nicer xcodebuild log formatting (also used in CI)
+# Note: xcbeautify is a CLI (brew install xcbeautify), not a gem.
+# It's preinstalled on GitHub macOS runners and used by the CI workflow.
