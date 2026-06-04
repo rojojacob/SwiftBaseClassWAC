@@ -24,7 +24,7 @@ public struct ArchiveStage: Stage {
             findings: [],
             summary: result.succeeded
                 ? "archived → \(archivePath)"
-                : "archive failed:\n\(result.stdout)\(result.stderr)"
+                : "archive failed:\n\(result.stdout)\n\(result.stderr)"
         )
     }
 }

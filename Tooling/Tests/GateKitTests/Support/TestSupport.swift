@@ -4,7 +4,8 @@ import Foundation
 /// Shared test fixtures. `makeContext(runner:)` is appended in Task 8 (after
 /// GateContext exists). Avoid `try!` here — the pre-commit `swiftlint --strict`
 /// hook flags `force_try`, so use do/catch + fatalError instead.
-func makeTestConfig(stages: String = "[format, lint, build, test]") -> GateConfig {
+func makeTestConfig(stages: String = "[format, lint, build, test]", release: String? = nil) -> GateConfig {
+    let releaseLine = release.map { "\nrelease: \($0)" } ?? ""
     do {
         return try GateConfig.parse("""
         project: App/App.xcodeproj
@@ -18,7 +19,7 @@ func makeTestConfig(stages: String = "[format, lint, build, test]") -> GateConfi
           ui_dir: App/AppUITests
           test_glob: "{Name}*Tests.swift"
           shared_dirs: [Core, DesignSystem]
-        stages: \(stages)
+        stages: \(stages)\(releaseLine)
         """)
     } catch {
         fatalError("invalid test YAML: \(error)")

@@ -22,3 +22,12 @@ import Testing
     #expect(result.passed == false)
     #expect(result.summary.contains("upload failed"))
 }
+
+@Test func flightHonorsCustomLane() throws {
+    let runner = FakeCommandRunner()
+    let config = makeTestConfig(release: "{ testflight_lane: release_candidate }")
+    let context = GateContext(config: config, runner: runner, repoRoot: URL(fileURLWithPath: "/repo"))
+    _ = try TestFlightStage().run(ResolvedScope(kind: .all, screens: []), context)
+    let call = try #require(runner.calls.first)
+    #expect(call == ["bundle", "exec", "fastlane", "release_candidate"]) // config override
+}

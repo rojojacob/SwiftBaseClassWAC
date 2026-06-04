@@ -14,7 +14,7 @@ public struct TestFlightStage: Stage {
             findings: [],
             summary: result.succeeded
                 ? "uploaded to TestFlight via fastlane \(lane)"
-                : "testflight failed:\n\(result.stdout)\(result.stderr)"
+                : "testflight failed:\n\(result.stdout)\n\(result.stderr)"
         )
     }
 }

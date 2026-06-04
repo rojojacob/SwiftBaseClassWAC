@@ -46,7 +46,7 @@ public struct BuildTestStage: Stage {
             stage: .test,
             outcome: result.succeeded ? .passed : .failed,
             findings: [],
-            summary: result.succeeded ? "tests passed" : "tests failed:\n\(result.stdout)\(result.stderr)"
+            summary: result.succeeded ? "tests passed" : "tests failed:\n\(result.stdout)\n\(result.stderr)"
         )
     }
 }
