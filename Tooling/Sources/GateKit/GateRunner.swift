@@ -24,10 +24,10 @@ public struct GateRunner {
         self.repoRoot = repoRoot
     }
 
-    public func run(_ kind: ScopeKind) throws -> Report {
+    public func run(_ kind: ScopeKind, unitOnly: Bool = false) throws -> Report {
         let resolver = ScopeResolver(config: config, runner: runner, finder: finder, repoRoot: repoRoot)
         let scope = try resolver.resolve(kind)
-        let pipeline = try Pipeline.standard(for: config)
+        let pipeline = try Pipeline.standard(for: config, unitOnly: unitOnly)
         let context = GateContext(config: config, runner: runner, repoRoot: repoRoot)
         let report = try pipeline.run(scope: scope, context: context)
         if report.passed {

@@ -43,3 +43,18 @@ import Testing
     #expect(runner.calls.isEmpty) // never shelled out to a bare, full-suite xcodebuild
     #expect(result.summary.contains("no tests matched scope"))
 }
+
+@Test func unitOnlyOmitsUITargets() throws {
+    let runner = FakeCommandRunner()
+    let screen = Screen(
+        name: "Counter",
+        codePath: "App/App/Features/Counter",
+        unitTestClasses: ["CounterModelTests"],
+        uiTestClasses: ["CounterUITests"]
+    )
+    _ = try BuildTestStage(unitOnly: true)
+        .run(ResolvedScope(kind: .screens, screens: [screen]), makeContext(runner: runner))
+    let call = try #require(runner.calls.first)
+    #expect(call.contains("-only-testing:AppTests/CounterModelTests"))
+    #expect(call.contains("-only-testing:AppUITests/CounterUITests") == false) // UI excluded
+}

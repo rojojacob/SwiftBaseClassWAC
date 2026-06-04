@@ -1,6 +1,9 @@
 public struct BuildTestStage: Stage {
     public let id: StageID = .test
-    public init() {}
+    private let unitOnly: Bool
+    public init(unitOnly: Bool = false) {
+        self.unitOnly = unitOnly
+    }
 
     public func run(_ scope: ResolvedScope, _ context: GateContext) throws -> StageResult {
         let config = context.config
@@ -15,8 +18,10 @@ public struct BuildTestStage: Stage {
                 for unit in screen.unitTestClasses {
                     argv.append("-only-testing:\(config.targets.unit)/\(unit)")
                 }
-                for uiClass in screen.uiTestClasses {
-                    argv.append("-only-testing:\(config.targets.ui)/\(uiClass)")
+                if !unitOnly {
+                    for uiClass in screen.uiTestClasses {
+                        argv.append("-only-testing:\(config.targets.ui)/\(uiClass)")
+                    }
                 }
             }
             // Without any -only-testing target this would degrade to a bare `xcodebuild
