@@ -1,0 +1,14 @@
+# fastlane match configuration
+# Stores signing certs + provisioning profiles, encrypted, in a SEPARATE
+# PRIVATE git repo so every machine + CI shares identical signing.
+# Docs: https://docs.fastlane.tools/actions/match/
+#
+# Set MATCH_GIT_URL (the private signing repo) and MATCH_PASSWORD (the
+# encryption passphrase) in fastlane/.env or CI secrets, then run:
+#   bundle exec fastlane match appstore     # first run generates + stores
+#   bundle exec fastlane match appstore --readonly   # later machines / CI
+
+git_url(ENV.fetch("MATCH_GIT_URL", ""))
+storage_mode("git")
+type("appstore")
+app_identifier(["com.wac.SwiftBaseClassWAC"])
