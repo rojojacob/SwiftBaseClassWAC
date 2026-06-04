@@ -47,3 +47,17 @@ private func finding(_ sev: AuditSeverity, _ rule: String, line: Int) -> AuditFi
     ])
     #expect(report.topN(2).map(\.severity) == [.critical, .high])
 }
+
+@Test func groupedSortsSameFileByLineAscending() {
+    // Same rule → same file ("App/Same.swift"); the within-file tie-break is line asc.
+    let report = AuditReport(findings: [
+        finding(.high, "Same", line: 30), finding(.high, "Same", line: 5)
+    ])
+    #expect(report.grouped.map(\.line) == [5, 30])
+}
+
+@Test func topNWithNonPositiveCountIsEmpty() {
+    let report = AuditReport(findings: [finding(.critical, "a", line: 1)])
+    #expect(report.topN(0).isEmpty)
+    #expect(report.topN(-3).isEmpty)
+}

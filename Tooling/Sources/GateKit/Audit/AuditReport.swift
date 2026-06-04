@@ -21,8 +21,10 @@ public struct AuditReport: Equatable, Codable, Sendable {
         }
     }
 
-    /// The highest-priority `n` findings ("fix these first").
+    /// The highest-priority `n` findings ("fix these first"). A non-positive `n`
+    /// yields an empty list (rather than trapping in `prefix`).
     public func topN(_ count: Int) -> [AuditFinding] {
-        Array(grouped.prefix(count))
+        guard count > 0 else { return [] }
+        return Array(grouped.prefix(count))
     }
 }

@@ -34,11 +34,19 @@ public enum SwiftLintJSON {
         "viewmodel_no_swiftui": "Drop `import SwiftUI` from the view model; use Observation."
     ]
 
+    /// Parses the JSON into findings. IMPORTANT: feed `swiftlint lint --reporter json`
+    /// output produced WITHOUT `--strict` — under `--strict` every warning becomes an
+    /// "Error" and the `.medium` tier would be unreachable. `.low` is reserved for other
+    /// sources (e.g. SwiftFormat drift), so SwiftLint rows only yield `.critical`/`.high`/`.medium`.
     public static func findings(fromJSON data: Data, repoRoot: String) throws -> [AuditFinding] {
         let rows = try JSONDecoder().decode([SwiftLintRow].self, from: data)
-        let prefix = repoRoot.hasSuffix("/") ? repoRoot : repoRoot + "/"
+        // An empty repoRoot would make `prefix` "/" and strip the leading slash off every
+        // absolute path; only relativize when we have a real root.
+        let prefix = repoRoot.isEmpty ? "" : (repoRoot.hasSuffix("/") ? repoRoot : repoRoot + "/")
         return rows.map { row in
-            let relative = row.file.hasPrefix(prefix) ? String(row.file.dropFirst(prefix.count)) : row.file
+            let relative = !prefix.isEmpty && row.file.hasPrefix(prefix)
+                ? String(row.file.dropFirst(prefix.count))
+                : row.file
             let severity: AuditSeverity = criticalRules.contains(row.ruleID)
                 ? .critical
                 : (row.severity.lowercased() == "error" ? .high : .medium)
