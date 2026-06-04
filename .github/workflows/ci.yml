@@ -6,7 +6,8 @@ name: iOS CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, Develop]
+  workflow_dispatch:        # run the full pipeline on demand against ANY branch
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -15,8 +16,6 @@ concurrency:
 env:
   SCHEME: "SwiftBaseClassWAC"
   PROJECT: "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj"
-  # A simulator that exists on the runner image; adjust if the image changes.
-  DESTINATION: "platform=iOS Simulator,name=iPhone 16"
 
 jobs:
   lint:
@@ -36,8 +35,27 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.app || true
+      - name: Select Xcode 26
+        run: |
+          XC=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XC" ]; then
+            echo "::error::Xcode 26 not found on the runner. Available Xcodes:"
+            ls -d /Applications/Xcode_*.app 2>/dev/null || true
+            exit 1
+          fi
+          sudo xcode-select -s "$XC/Contents/Developer"
+          xcodebuild -version
+
+      - name: Pick an available iPhone simulator
+        run: |
+          UDID=$(xcrun simctl list devices available --json | python3 -c "import sys, json; ds = [d for r in json.load(sys.stdin)['devices'].values() for d in r if d.get('isAvailable') and d['name'].startswith('iPhone')]; print(ds[0]['udid'] if ds else '')")
+          if [ -z "$UDID" ]; then
+            echo "::error::No available iPhone simulator on the runner."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "SIMULATOR_ID=$UDID" >> "$GITHUB_ENV"
+          echo "Using simulator $UDID"
 
       - name: Resolve dependencies
         run: xcodebuild -resolvePackageDependencies -project "$PROJECT"
@@ -48,13 +66,13 @@ jobs:
           xcodebuild test \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
-            -destination "$DESTINATION" \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
             -resultBundlePath TestResults.xcresult \
             | xcbeautify || (echo "::error::Tests failed"; exit 1)
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: TestResults.xcresult
@@ -62,7 +80,13 @@ jobs:
   archive:
     name: Archive (.ipa)
     needs: test            # only archive once tests are green
-    if: github.ref == 'refs/heads/main'
+    # Archive runs on: a manual dispatch (any branch), or a push to main/Develop.
+    # It is intentionally skipped on pull_request events, where github.ref is
+    # refs/pull/N/merge — dispatch the branch directly to archive a PR branch.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      || github.ref == 'refs/heads/main'
+      || github.ref == 'refs/heads/Develop'
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
