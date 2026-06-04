@@ -53,3 +53,16 @@ private func screen(_ name: String, unit: [String], ui: [String]) -> Screen {
     reader.filesByPath["/repo/u/PostsTests.swift"] = Data("b".utf8)
     #expect(try hasher.hash(scr) != before)
 }
+
+@Test func hashChangesWhenSourceFileIsAdded() throws {
+    let finder = FakeFileFinder()
+    finder.filesByDirectory["/repo/App/App/Features/Posts"] = []
+    let reader = FakeFileReader()
+    let hasher = ScreenHasher(finder: finder, reader: reader, repoRoot: URL(fileURLWithPath: "/repo"))
+    let scr = screen("Posts", unit: [], ui: [])
+    let before = try hasher.hash(scr)
+
+    finder.filesByDirectory["/repo/App/App/Features/Posts"] = ["/repo/App/App/Features/Posts/NewView.swift"]
+    reader.filesByPath["/repo/App/App/Features/Posts/NewView.swift"] = Data("struct NewView {}".utf8)
+    #expect(try hasher.hash(scr) != before)
+}

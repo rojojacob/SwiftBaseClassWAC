@@ -2,6 +2,9 @@ import Foundation
 
 /// Stores the stamp at `<repoRoot>/.gate/last-green.json`. A missing or
 /// unreadable file is treated as an empty stamp (first run is never wedged).
+/// `save` is best-effort: the stamp is a regenerable local cache, so a write
+/// failure (read-only checkout, full disk) is intentionally swallowed rather
+/// than thrown — the next green run simply re-writes it.
 public struct SystemStampStore: StampStoring {
     private let url: URL
     private let directory: URL

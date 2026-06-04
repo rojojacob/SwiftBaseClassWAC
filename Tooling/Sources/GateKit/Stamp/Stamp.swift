@@ -3,6 +3,7 @@ import Foundation
 /// The per-screen verification stamp: screen name → content hash of its last
 /// green run. Persisted as `.gate/last-green.json`.
 public struct Stamp: Codable, Equatable, Sendable {
+    /// Screen name → SHA-256 hex hash of its source + tests at its last green run.
     public private(set) var hashes: [String: String]
 
     public init(hashes: [String: String]) {

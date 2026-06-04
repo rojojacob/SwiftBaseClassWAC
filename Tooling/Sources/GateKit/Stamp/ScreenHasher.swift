@@ -1,9 +1,10 @@
 import CryptoKit
 import Foundation
 
-/// Computes a content hash for a screen: every `.swift` under its code path plus
-/// its unit and UI test files. Any edit to code or tests changes the hash, which
-/// is what the verification stamp compares against.
+/// Computes a content hash for a screen from its source plus its unit and UI test
+/// files: every `.swift` under the screen's code path together with its test files.
+/// Any edit to code or tests changes the hash, which is what the verification stamp
+/// compares against.
 public struct ScreenHasher {
     private let finder: FileFinder
     private let reader: FileReading
@@ -17,7 +18,7 @@ public struct ScreenHasher {
 
     public func hash(_ screen: Screen) throws -> String {
         let codeDir = repoRoot.appendingPathComponent(screen.codePath).path
-        let sourceFiles = finder.files(in: codeDir, matching: "*")
+        let sourceFiles = finder.files(in: codeDir, matching: "*.swift")
         // Sort so the hash is independent of filesystem enumeration order.
         let paths = (sourceFiles + screen.unitTestFiles + screen.uiTestFiles).sorted()
 
