@@ -94,3 +94,6 @@ SwiftBaseClassWAC/Config/Secrets.xcconfig
 
 # gate engine (SwiftPM build artifacts)
 Tooling/.build/
+
+# gate engine (local verification stamp + eco ledger)
+.gate/
