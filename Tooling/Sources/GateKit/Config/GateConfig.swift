@@ -38,7 +38,7 @@ public struct GateConfig: Codable, Equatable, Sendable {
     }
 }
 
-public enum GateConfigError: Error, Equatable {
+public enum GateConfigError: Error {
     case fileNotFound(String)
     case parseFailed(String)
 }
@@ -53,8 +53,14 @@ public extension GateConfig {
     }
 
     static func load(from url: URL) throws -> GateConfig {
-        guard let text = try? String(contentsOf: url, encoding: .utf8) else {
+        guard FileManager.default.fileExists(atPath: url.path) else {
             throw GateConfigError.fileNotFound(url.path)
+        }
+        let text: String
+        do {
+            text = try String(contentsOf: url, encoding: .utf8)
+        } catch {
+            throw GateConfigError.parseFailed("could not read \(url.path): \(error)")
         }
         return try parse(text)
     }

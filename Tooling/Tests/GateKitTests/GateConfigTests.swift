@@ -29,10 +29,20 @@ stages: [format, lint, build, test]
     #expect(config.conventions.testGlob == "{Name}*Tests.swift")
     #expect(config.conventions.sharedDirs == ["Core", "DesignSystem"])
     #expect(config.stages == ["format", "lint", "build", "test"])
+    #expect(config.project == "App/App.xcodeproj")
+    #expect(config.targets.app == "App")
+    #expect(config.targets.ui == "AppUITests")
+    #expect(config.simulator == "iPhone 16")
+    #expect(config.conventions.unitDir == "App/AppTests")
+    #expect(config.conventions.uiDir == "App/AppUITests")
 }
 
 @Test func parseFailsOnGarbage() {
-    #expect(throws: GateConfigError.self) {
+    let error = #expect(throws: GateConfigError.self) {
         _ = try GateConfig.parse("not: [valid")
+    }
+    guard case .parseFailed? = error else {
+        Issue.record("expected GateConfigError.parseFailed, got \(String(describing: error))")
+        return
     }
 }
