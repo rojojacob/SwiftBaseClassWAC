@@ -15,8 +15,6 @@ concurrency:
 env:
   SCHEME: "SwiftBaseClassWAC"
   PROJECT: "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj"
-  # A simulator that exists on the runner image; adjust if the image changes.
-  DESTINATION: "platform=iOS Simulator,name=iPhone 16"
 
 jobs:
   lint:
@@ -36,8 +34,27 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_26.app || true
+      - name: Select Xcode 26
+        run: |
+          XC=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XC" ]; then
+            echo "::error::Xcode 26 not found on the runner. Available Xcodes:"
+            ls -d /Applications/Xcode_*.app 2>/dev/null || true
+            exit 1
+          fi
+          sudo xcode-select -s "$XC/Contents/Developer"
+          xcodebuild -version
+
+      - name: Pick an available iPhone simulator
+        run: |
+          UDID=$(xcrun simctl list devices available --json | python3 -c "import sys, json; ds = [d for r in json.load(sys.stdin)['devices'].values() for d in r if d.get('isAvailable') and d['name'].startswith('iPhone')]; print(ds[0]['udid'] if ds else '')")
+          if [ -z "$UDID" ]; then
+            echo "::error::No available iPhone simulator on the runner."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "SIMULATOR_ID=$UDID" >> "$GITHUB_ENV"
+          echo "Using simulator $UDID"
 
       - name: Resolve dependencies
         run: xcodebuild -resolvePackageDependencies -project "$PROJECT"
@@ -48,7 +65,7 @@ jobs:
           xcodebuild test \
             -project "$PROJECT" \
             -scheme "$SCHEME" \
-            -destination "$DESTINATION" \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
             -resultBundlePath TestResults.xcresult \
             | xcbeautify || (echo "::error::Tests failed"; exit 1)
 
