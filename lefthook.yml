@@ -5,16 +5,18 @@
 pre-commit:
   parallel: false
   commands:
-    # 1. Auto-fix formatting on staged Swift files, then re-stage them.
+    # 1. Auto-fix formatting on the STAGED Swift files only (not the whole repo,
+    #    so a commit never sweeps up unrelated reformatted files), then re-stage.
     format:
       glob: "*.swift"
-      run: ./gate format --fix && git add {staged_files}
+      run: swiftformat {staged_files}
       stage_fixed: true
-    # 2. Strict lint (warnings are errors).
+    # 2. Strict lint on the staged files (warnings are errors).
     lint:
       glob: "*.swift"
-      run: ./gate lint
-    # 3. Scoped UNIT tests for the screens with staged changes (UI excluded — kept fast).
+      run: swiftlint lint --strict {staged_files}
+    # 3. The new capability: scoped UNIT tests for the screens with staged changes
+    #    (UI excluded — kept fast). Routes through gate; a non-feature change is a no-op.
     unit:
       glob: "*.swift"
       run: ./gate staged --no-ui

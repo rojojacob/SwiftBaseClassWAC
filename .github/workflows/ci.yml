@@ -42,7 +42,7 @@ jobs:
             ~/Library/Caches/org.swift.swiftpm
             ~/Library/Developer/Xcode/DerivedData
             Tooling/.build
-          key: ${{ runner.os }}-spm-dd-${{ hashFiles('Tooling/Package.resolved', 'SwiftBaseClassWAC/**/*.swift') }}
+          key: ${{ runner.os }}-spm-dd-${{ hashFiles('Tooling/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-dd-
 
@@ -120,6 +120,11 @@ jobs:
     name: Fast scoped gate (PR)
     if: github.event_name == 'pull_request'
     runs-on: macos-15
+    # Informational only — the `test` job above is the source of truth. This job
+    # runs the scoped gate (which includes a simulator test stage) as a fast
+    # preview; never let its env-sensitivity (simulator availability) block a PR,
+    # so do NOT add it to required status checks.
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v5
         with:
@@ -127,7 +132,12 @@ jobs:
       - name: Select Xcode 26
         run: |
           XC=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
-          [ -n "$XC" ] && sudo xcode-select -s "$XC/Contents/Developer"
+          if [ -z "$XC" ]; then
+            echo "::error::Xcode 26 not found on the runner."
+            ls -d /Applications/Xcode_*.app 2>/dev/null || true
+            exit 1
+          fi
+          sudo xcode-select -s "$XC/Contents/Developer"
           xcodebuild -version
       - name: Install SwiftLint & SwiftFormat
         run: brew install swiftlint swiftformat
