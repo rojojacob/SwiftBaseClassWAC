@@ -70,7 +70,7 @@ public struct ScopeResolver {
     /// Every screen in the project: one per immediate subdirectory of the features dir.
     public func allScreens() -> [Screen] {
         let featuresDir = repoRoot.appendingPathComponent(config.conventions.featuresDir).path
-        return finder.subdirectories(of: featuresDir).sorted().map(screen(named:))
+        return finder.subdirectories(of: featuresDir).map(screen(named:)) // already sorted
     }
 
     private func screen(named name: String) -> Screen {

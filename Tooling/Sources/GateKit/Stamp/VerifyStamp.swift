@@ -3,8 +3,8 @@ import Foundation
 /// Compares each screen's current content hash to its stamped hash. Any
 /// mismatch (or never-stamped screen) is "stale" → the build phase fails.
 public struct VerifyStamp {
-    public let screens: () -> [Screen]
-    public let hasher: ScreenHasher
+    let screens: () -> [Screen]
+    let hasher: ScreenHasher
     private let store: StampStoring
 
     public init(screens: @escaping () -> [Screen], hasher: ScreenHasher, store: StampStoring) {

@@ -26,6 +26,7 @@ public struct SystemFileFinder: FileFinder {
         let fm = FileManager.default
         guard let entries = try? fm.contentsOfDirectory(atPath: directory) else { return [] }
         return entries.filter { name in
+            guard !name.hasPrefix(".") else { return false } // skip .git/.build/etc, as `files` does
             var isDir: ObjCBool = false
             let path = (directory as NSString).appendingPathComponent(name)
             return fm.fileExists(atPath: path, isDirectory: &isDir) && isDir.boolValue
