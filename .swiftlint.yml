@@ -102,5 +102,12 @@ custom_rules:
       - identifier
     message: "Use AppLogger instead of print() in app code."
     severity: error
+  view_no_networking:
+    name: "View has no networking/DI"
+    included: ".*View\\.swift"
+    excluded: ".*Tests.*"
+    regex: "\\b(APIClient|URLSession|Dependencies\\.live)\\b"
+    message: "Views must not touch networking or the DI container directly — go through a ViewModel."
+    severity: error
 
 reporter: "xcode"
