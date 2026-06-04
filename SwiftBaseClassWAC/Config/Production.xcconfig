@@ -1,0 +1,5 @@
+// Production.xcconfig — mapped to the Release build configuration.
+#include "Shared.xcconfig"
+
+APP_ENVIRONMENT = production
+API_BASE_URL = api.example.com

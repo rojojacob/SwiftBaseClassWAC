@@ -15,6 +15,12 @@ pre-commit:
       glob: "*.swift"
       run: swiftlint lint --strict {staged_files}
 
+commit-msg:
+  commands:
+    # Enforce Conventional Commits on the subject line.
+    conventional:
+      run: bash scripts/check-commit-msg.sh {1}
+
 pre-push:
   commands:
     # Last line of defense before code leaves the machine.

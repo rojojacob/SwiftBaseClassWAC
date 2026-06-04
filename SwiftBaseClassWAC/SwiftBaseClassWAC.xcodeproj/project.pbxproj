@@ -12,49 +12,48 @@
 			containerPortal = F3FD57612FD105A900730A7E /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F3FD57682FD105A900730A7E;
-			remoteInfo = "SwiftBaseClassWAC";
+			remoteInfo = SwiftBaseClassWAC;
 		};
 		B100000000000000000000BB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F3FD57612FD105A900730A7E /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F3FD57682FD105A900730A7E;
-			remoteInfo = "SwiftBaseClassWAC";
+			remoteInfo = SwiftBaseClassWAC;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F3FD57692FD105A900730A7E /* SwiftBaseClassWAC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftBaseClassWAC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A100000000000000000000A2 /* SwiftBaseClassWACTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftBaseClassWACTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B100000000000000000000B2 /* SwiftBaseClassWACUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftBaseClassWACUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A100000000000000000000A2 /* SwiftBaseClassWACTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftBaseClassWACTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B100000000000000000000B2 /* SwiftBaseClassWACUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftBaseClassWACUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3FD57692FD105A900730A7E /* SwiftBaseClassWAC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftBaseClassWAC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF00000000000000000000C1 /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C2 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C3 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C4 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C5 /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F3FD576B2FD105A900730A7E /* SwiftBaseClassWAC */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "SwiftBaseClassWAC";
-			sourceTree = "<group>";
-		};
 		A100000000000000000000A6 /* SwiftBaseClassWACTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "SwiftBaseClassWACTests";
+			path = SwiftBaseClassWACTests;
 			sourceTree = "<group>";
 		};
 		B100000000000000000000B6 /* SwiftBaseClassWACUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "SwiftBaseClassWACUITests";
+			path = SwiftBaseClassWACUITests;
+			sourceTree = "<group>";
+		};
+		F3FD576B2FD105A900730A7E /* SwiftBaseClassWAC */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SwiftBaseClassWAC;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F3FD57662FD105A900730A7E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A100000000000000000000A4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,17 +68,38 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3FD57662FD105A900730A7E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		F3FD57602FD105A900730A7E = {
 			isa = PBXGroup;
 			children = (
+				CF00000000000000000000C0 /* Config */,
 				F3FD576B2FD105A900730A7E /* SwiftBaseClassWAC */,
 				A100000000000000000000A6 /* SwiftBaseClassWACTests */,
 				B100000000000000000000B6 /* SwiftBaseClassWACUITests */,
 				F3FD576A2FD105A900730A7E /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		CF00000000000000000000C0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CF00000000000000000000C1 /* Shared.xcconfig */,
+				CF00000000000000000000C2 /* Development.xcconfig */,
+				CF00000000000000000000C3 /* Staging.xcconfig */,
+				CF00000000000000000000C4 /* Production.xcconfig */,
+				CF00000000000000000000C5 /* Secrets.example.xcconfig */,
+				CF00000000000000000000C6 /* Info.plist */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		F3FD576A2FD105A900730A7E /* Products */ = {
@@ -95,29 +115,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F3FD57682FD105A900730A7E /* SwiftBaseClassWAC */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F3FD57742FD105AA00730A7E /* Build configuration list for PBXNativeTarget "SwiftBaseClassWAC" */;
-			buildPhases = (
-				C100000000000000000000C1 /* SwiftLint */,
-				F3FD57652FD105A900730A7E /* Sources */,
-				F3FD57662FD105A900730A7E /* Frameworks */,
-				F3FD57672FD105A900730A7E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				F3FD576B2FD105A900730A7E /* SwiftBaseClassWAC */,
-			);
-			name = "SwiftBaseClassWAC";
-			packageProductDependencies = (
-			);
-			productName = "SwiftBaseClassWAC";
-			productReference = F3FD57692FD105A900730A7E /* SwiftBaseClassWAC.app */;
-			productType = "com.apple.product-type.application";
-		};
 		A100000000000000000000A1 /* SwiftBaseClassWACTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A100000000000000000000A9 /* Build configuration list for PBXNativeTarget "SwiftBaseClassWACTests" */;
@@ -134,10 +131,10 @@
 			fileSystemSynchronizedGroups = (
 				A100000000000000000000A6 /* SwiftBaseClassWACTests */,
 			);
-			name = "SwiftBaseClassWACTests";
+			name = SwiftBaseClassWACTests;
 			packageProductDependencies = (
 			);
-			productName = "SwiftBaseClassWACTests";
+			productName = SwiftBaseClassWACTests;
 			productReference = A100000000000000000000A2 /* SwiftBaseClassWACTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -157,12 +154,35 @@
 			fileSystemSynchronizedGroups = (
 				B100000000000000000000B6 /* SwiftBaseClassWACUITests */,
 			);
-			name = "SwiftBaseClassWACUITests";
+			name = SwiftBaseClassWACUITests;
 			packageProductDependencies = (
 			);
-			productName = "SwiftBaseClassWACUITests";
+			productName = SwiftBaseClassWACUITests;
 			productReference = B100000000000000000000B2 /* SwiftBaseClassWACUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		F3FD57682FD105A900730A7E /* SwiftBaseClassWAC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3FD57742FD105AA00730A7E /* Build configuration list for PBXNativeTarget "SwiftBaseClassWAC" */;
+			buildPhases = (
+				C100000000000000000000C1 /* SwiftLint */,
+				F3FD57652FD105A900730A7E /* Sources */,
+				F3FD57662FD105A900730A7E /* Frameworks */,
+				F3FD57672FD105A900730A7E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F3FD576B2FD105A900730A7E /* SwiftBaseClassWAC */,
+			);
+			name = SwiftBaseClassWAC;
+			packageProductDependencies = (
+			);
+			productName = SwiftBaseClassWAC;
+			productReference = F3FD57692FD105A900730A7E /* SwiftBaseClassWAC.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -174,9 +194,6 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					F3FD57682FD105A900730A7E = {
-						CreatedOnToolsVersion = 26.0.1;
-					};
 					A100000000000000000000A1 = {
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = F3FD57682FD105A900730A7E;
@@ -184,6 +201,9 @@
 					B100000000000000000000B1 = {
 						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = F3FD57682FD105A900730A7E;
+					};
+					F3FD57682FD105A900730A7E = {
+						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
 			};
@@ -209,13 +229,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		F3FD57672FD105A900730A7E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A100000000000000000000A5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -224,6 +237,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B100000000000000000000B5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3FD57672FD105A900730A7E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -255,13 +275,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		F3FD57652FD105A900730A7E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A100000000000000000000A3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -270,6 +283,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B100000000000000000000B3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3FD57652FD105A900730A7E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -292,6 +312,80 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		A100000000000000000000A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T92Y92RB48;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wac.SwiftBaseClassWACTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftBaseClassWAC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftBaseClassWAC";
+			};
+			name = Debug;
+		};
+		A100000000000000000000A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T92Y92RB48;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wac.SwiftBaseClassWACTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftBaseClassWAC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftBaseClassWAC";
+			};
+			name = Release;
+		};
+		B100000000000000000000B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T92Y92RB48;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wac.SwiftBaseClassWACUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SwiftBaseClassWAC;
+			};
+			name = Debug;
+		};
+		B100000000000000000000B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T92Y92RB48;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wac.SwiftBaseClassWACUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SwiftBaseClassWAC;
+			};
+			name = Release;
+		};
 		F3FD57722FD105AA00730A7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -415,6 +509,7 @@
 		};
 		F3FD57752FD105AA00730A7E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF00000000000000000000C2 /* Development.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -423,6 +518,7 @@
 				DEVELOPMENT_TEAM = T92Y92RB48;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -433,7 +529,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wac.SwiftBaseClassWAC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wac.SwiftBaseClassWAC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -447,6 +543,7 @@
 		};
 		F3FD57762FD105AA00730A7E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF00000000000000000000C4 /* Production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -455,6 +552,7 @@
 				DEVELOPMENT_TEAM = T92Y92RB48;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -465,7 +563,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wac.SwiftBaseClassWAC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wac.SwiftBaseClassWAC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -477,101 +575,9 @@
 			};
 			name = Release;
 		};
-		A100000000000000000000A7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T92Y92RB48;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wac.SwiftBaseClassWACTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftBaseClassWAC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftBaseClassWAC";
-			};
-			name = Debug;
-		};
-		A100000000000000000000A8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T92Y92RB48;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wac.SwiftBaseClassWACTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwiftBaseClassWAC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SwiftBaseClassWAC";
-			};
-			name = Release;
-		};
-		B100000000000000000000B7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T92Y92RB48;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wac.SwiftBaseClassWACUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "SwiftBaseClassWAC";
-			};
-			name = Debug;
-		};
-		B100000000000000000000B8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T92Y92RB48;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wac.SwiftBaseClassWACUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "SwiftBaseClassWAC";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F3FD57642FD105A900730A7E /* Build configuration list for PBXProject "SwiftBaseClassWAC" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F3FD57722FD105AA00730A7E /* Debug */,
-				F3FD57732FD105AA00730A7E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F3FD57742FD105AA00730A7E /* Build configuration list for PBXNativeTarget "SwiftBaseClassWAC" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F3FD57752FD105AA00730A7E /* Debug */,
-				F3FD57762FD105AA00730A7E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		A100000000000000000000A9 /* Build configuration list for PBXNativeTarget "SwiftBaseClassWACTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -586,6 +592,24 @@
 			buildConfigurations = (
 				B100000000000000000000B7 /* Debug */,
 				B100000000000000000000B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3FD57642FD105A900730A7E /* Build configuration list for PBXProject "SwiftBaseClassWAC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3FD57722FD105AA00730A7E /* Debug */,
+				F3FD57732FD105AA00730A7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3FD57742FD105AA00730A7E /* Build configuration list for PBXNativeTarget "SwiftBaseClassWAC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3FD57752FD105AA00730A7E /* Debug */,
+				F3FD57762FD105AA00730A7E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
