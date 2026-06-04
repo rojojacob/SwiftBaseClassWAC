@@ -6,7 +6,7 @@ name: iOS CI
 on:
   pull_request:
   push:
-    branches: [main, Develop]
+    branches: [main, Develop, "feat/**", "fix/**"]
   workflow_dispatch:        # run the full pipeline on demand against ANY branch
 
 concurrency:
@@ -34,6 +34,17 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
+
+      - name: Cache SwiftPM & DerivedData
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/org.swift.swiftpm
+            ~/Library/Developer/Xcode/DerivedData
+            Tooling/.build
+          key: ${{ runner.os }}-spm-dd-${{ hashFiles('Tooling/Package.resolved', 'SwiftBaseClassWAC/**/*.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-dd-
 
       - name: Select Xcode 26
         run: |
@@ -104,3 +115,21 @@ jobs:
             -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO \
             | xcbeautify
+
+  fast-check:
+    name: Fast scoped gate (PR)
+    if: github.event_name == 'pull_request'
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0          # gate branch needs history to diff against the base
+      - name: Select Xcode 26
+        run: |
+          XC=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1)
+          [ -n "$XC" ] && sudo xcode-select -s "$XC/Contents/Developer"
+          xcodebuild -version
+      - name: Install SwiftLint & SwiftFormat
+        run: brew install swiftlint swiftformat
+      - name: Scoped gate for changed screens
+        run: ./gate branch --base "origin/${{ github.base_ref }}"
