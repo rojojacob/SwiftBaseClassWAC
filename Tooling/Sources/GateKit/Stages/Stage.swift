@@ -2,6 +2,8 @@ public enum StageID: String, Equatable, Sendable {
     case format
     case lint
     case test
+    case archive
+    case testflight
 }
 
 public enum Outcome: Equatable, Sendable {

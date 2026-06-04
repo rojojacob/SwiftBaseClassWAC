@@ -1,6 +1,7 @@
 public enum PipelineError: Error, Equatable {
     case unknownStage(String)
     case noStages
+    case keywordStage(String)
 }
 
 public struct Pipeline {
@@ -31,6 +32,8 @@ public extension Pipeline {
             case "lint": stages.append(LintStage())
             case "test": stages.append(BuildTestStage(unitOnly: unitOnly))
             case "build": continue // building is performed by the test stage
+            // archive/testflight are CLI keyword stages — never part of the automatic pipeline.
+            case "archive", "testflight": throw PipelineError.keywordStage(name)
             // An unrecognized stage name is almost always a typo in gate.yml. Reject it
             // rather than silently skipping a check the author believed was running.
             default: throw PipelineError.unknownStage(name)

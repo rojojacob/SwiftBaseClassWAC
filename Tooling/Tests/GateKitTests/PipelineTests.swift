@@ -65,3 +65,10 @@ private func anyContext() -> GateContext {
         _ = try Pipeline.standard(for: makeTestConfig(stages: "[build]"))
     }
 }
+
+@Test func standardFactoryRejectsKeywordStages() {
+    // archive/testflight are CLI keyword stages, never part of the default pipeline.
+    #expect(throws: PipelineError.self) {
+        _ = try Pipeline.standard(for: makeTestConfig(stages: "[format, archive]"))
+    }
+}
