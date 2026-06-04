@@ -46,3 +46,27 @@ stages: [format, lint, build, test]
         return
     }
 }
+
+@Test func parsesOptionalHealthThreshold() throws {
+    let yaml = """
+    project: App/App.xcodeproj
+    scheme: App
+    targets: { app: App, unit: AppTests, ui: AppUITests }
+    simulator: "iPhone 16 Pro"
+    base_branch: main
+    conventions:
+      features_dir: App/App/Features
+      unit_dir: App/AppTests
+      ui_dir: App/AppUITests
+      test_glob: "{Name}*Tests.swift"
+      shared_dirs: [Core]
+    stages: [format, lint, test]
+    thresholds: { health_min: 80 }
+    """
+    let config = try GateConfig.parse(yaml)
+    #expect(config.thresholds?.healthMin == 80)
+}
+
+@Test func thresholdsAreOptional() {
+    #expect(makeTestConfig().thresholds == nil)
+}

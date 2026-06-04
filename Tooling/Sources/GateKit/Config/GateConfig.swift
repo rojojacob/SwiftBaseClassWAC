@@ -23,6 +23,14 @@ public struct GateConventions: Codable, Equatable, Sendable {
     }
 }
 
+public struct GateThresholds: Codable, Equatable, Sendable {
+    public let healthMin: Int
+
+    enum CodingKeys: String, CodingKey {
+        case healthMin = "health_min"
+    }
+}
+
 public struct GateConfig: Codable, Equatable, Sendable {
     public let project: String
     public let scheme: String
@@ -31,9 +39,10 @@ public struct GateConfig: Codable, Equatable, Sendable {
     public let baseBranch: String
     public let conventions: GateConventions
     public let stages: [String]
+    public let thresholds: GateThresholds?
 
     enum CodingKeys: String, CodingKey {
-        case project, scheme, targets, simulator, conventions, stages
+        case project, scheme, targets, simulator, conventions, stages, thresholds
         case baseBranch = "base_branch"
     }
 }
