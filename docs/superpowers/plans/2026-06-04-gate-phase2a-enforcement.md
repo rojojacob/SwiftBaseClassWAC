@@ -1639,7 +1639,7 @@ Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 - `cd Tooling && swift test` is green (all GateKit unit tests incl. the new stamp/hash/verify/staged/unit-only suites).
 - `./gate verify-stamp` exits 0 right after a green `./gate all`, and exits 1 naming the screen after an un-gated edit; `GATE_SKIP_STAMP=1 ./gate verify-stamp` prints a warning and exits 0.
 - `./gate staged --no-ui`, `./gate format --fix`, `./gate lint` all run and exit correctly.
-- lefthook `pre-commit` routes through `gate` (format/lint/scoped-unit) and `pre-push` runs `gate branch`; no behavior regression vs. the old hooks.
+- lefthook `pre-commit` runs scoped format + lint on the **staged files** (preserving the old, fast, no-behavior-loss scoping — `swiftformat`/`swiftlint` directly, not the repo-wide `gate format`/`gate lint`, which would reformat/stage unrelated files) **plus** the new gate-powered `gate staged --no-ui` scoped unit tests; `pre-push` runs `gate branch`. (`gate format`/`gate lint` remain as manual whole-repo commands.) No behavior regression vs. the old hooks.
 - The app target has a `Gate verify-stamp` build phase that blocks ⌘R on a stale screen and is bypassable via `GATE_SKIP_STAMP=1` / skipped in CI.
 - CI is additively enhanced (cache + fast-check job + broader triggers); the existing `lint`/`test`/`archive` jobs are byte-for-byte semantically unchanged and nothing green today goes red.
 - `.gate/` is gitignored.
