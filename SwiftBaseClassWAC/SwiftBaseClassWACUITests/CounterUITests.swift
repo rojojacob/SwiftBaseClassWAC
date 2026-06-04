@@ -20,16 +20,42 @@ final class CounterUITests: XCTestCase {
 
         let value = app.staticTexts["counter.value"]
         XCTAssertTrue(value.waitForExistence(timeout: 5))
-        XCTAssertEqual(value.label, "0")
+        assertLabel(value, becomes: "0")
+
+        // Wait for the label to settle after each tap: the value uses an
+        // animated numeric content transition, so reading `.label` immediately
+        // after a tap can race the animation and observe the previous value.
+        app.buttons["counter.increment"].tap()
+        assertLabel(value, becomes: "1")
 
         app.buttons["counter.increment"].tap()
-        app.buttons["counter.increment"].tap()
-        XCTAssertEqual(value.label, "2")
+        assertLabel(value, becomes: "2")
 
         app.buttons["counter.decrement"].tap()
-        XCTAssertEqual(value.label, "1")
+        assertLabel(value, becomes: "1")
 
         app.buttons["counter.reset"].tap()
-        XCTAssertEqual(value.label, "0")
+        assertLabel(value, becomes: "0")
+    }
+
+    /// Waits (up to `timeout`) for `element`'s label to equal `expected`,
+    /// failing only if it never settles. Robust against UI animations.
+    private func assertLabel(
+        _ element: XCUIElement,
+        becomes expected: String,
+        timeout: TimeInterval = 5,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let predicate = NSPredicate(format: "label == %@", expected)
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(
+            result,
+            .completed,
+            "Expected label \"\(expected)\" but got \"\(element.label)\"",
+            file: file,
+            line: line
+        )
     }
 }
