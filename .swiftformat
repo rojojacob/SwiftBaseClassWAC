@@ -1,0 +1,30 @@
+# SwiftFormat configuration
+# Docs: https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md
+# Run:  swiftformat .          (format in place)
+#       swiftformat --lint .   (check only, non-mutating)
+
+# Swift language version drives syntax-aware formatting
+# (matches SWIFT_VERSION in the Xcode project build settings)
+--swiftversion 5.0
+
+# Indentation & wrapping
+--indent 4
+--maxwidth 120
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen balanced
+
+# Self / redundancy
+--self remove
+--importgrouping testable-bottom
+--commas inline
+--trimwhitespace always
+--semicolons never
+
+# Marks & organization
+--marktypes never
+--organizetypes class,struct,enum,extension
+
+# Excluded paths
+--exclude .build,DerivedData,**/Generated,fastlane,Pods,Carthage

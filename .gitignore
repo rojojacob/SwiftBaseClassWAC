@@ -1,0 +1,74 @@
+# ---------------------------------------------------------------------------
+# macOS
+# ---------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# ---------------------------------------------------------------------------
+# Xcode — user-specific & build artifacts
+# ---------------------------------------------------------------------------
+## User settings
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+## Build output
+build/
+DerivedData/
+*.xcarchive
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Xcode injected / generated
+*.moved-aside
+*.hmap
+*.ipa
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# ---------------------------------------------------------------------------
+# Swift Package Manager
+# ---------------------------------------------------------------------------
+.build/
+.swiftpm/
+Package.resolved
+# Keep the SPM config the project workspace tracks:
+!*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+# ---------------------------------------------------------------------------
+# CocoaPods / Carthage (only relevant if added later)
+# ---------------------------------------------------------------------------
+Pods/
+Carthage/Build/
+
+# ---------------------------------------------------------------------------
+# fastlane
+# ---------------------------------------------------------------------------
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+fastlane/README.md
+
+## Signing assets must never be committed in the clear
+*.mobileprovision
+*.p12
+*.cer
+*.certSigningRequest
+
+# ---------------------------------------------------------------------------
+# Tooling caches
+# ---------------------------------------------------------------------------
+.lefthook-local/
+*.log
+
+# ---------------------------------------------------------------------------
+# Editor / assistant local settings
+# ---------------------------------------------------------------------------
+.claude/settings.local.json

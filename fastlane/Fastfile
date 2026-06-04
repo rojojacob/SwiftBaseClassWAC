@@ -1,0 +1,60 @@
+# fastlane Fastfile
+# Run a lane with:  bundle exec fastlane <lane>
+# Docs: https://docs.fastlane.tools
+#
+# Prerequisites (one-time):
+#   - `gem install bundler && bundle install`  (see Gemfile)
+#   - A private "match" repo for signing assets:  bundle exec fastlane match init
+#   - App Store Connect API key or app-specific password for uploads.
+
+default_platform(:ios)
+
+SCHEME = "Swift Base Class WAC"
+PROJECT = "Swift Base Class WAC/Swift Base Class WAC.xcodeproj"
+
+platform :ios do
+  desc "Run the full test suite (mirrors CI)"
+  lane :test do
+    run_tests(
+      project: PROJECT,
+      scheme: SCHEME,
+      devices: ["iPhone 16"]
+    )
+  end
+
+  desc "Build a signed .ipa and upload to TestFlight (internal + external testing)"
+  lane :beta do
+    # Sync signing assets from the private match repo (read-only on CI).
+    match(type: "appstore", readonly: is_ci)
+
+    # Bump the build number so each upload is unique.
+    increment_build_number(xcodeproj: PROJECT)
+
+    # Build the .ipa (archive + export).
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      export_method: "app-store"
+    )
+
+    # Upload to TestFlight without blocking on Apple's processing.
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+
+  desc "Promote the latest build for App Store review"
+  lane :release do
+    match(type: "appstore", readonly: is_ci)
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      export_method: "app-store"
+    )
+    # Submit metadata + binary. Configure metadata under fastlane/metadata/.
+    upload_to_app_store(
+      submit_for_review: true,
+      automatic_release: false,
+      force: true,
+      precheck_include_in_app_purchases: false
+    )
+  end
+end

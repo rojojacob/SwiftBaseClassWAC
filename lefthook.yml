@@ -1,0 +1,22 @@
+# Lefthook git hooks
+# Install once after cloning:  lefthook install
+# Docs: https://lefthook.dev
+
+pre-commit:
+  parallel: true
+  commands:
+    # Auto-fix formatting on staged Swift files, then re-stage them.
+    format:
+      glob: "*.swift"
+      run: swiftformat {staged_files} && git add {staged_files}
+      stage_fixed: true
+    # Block the commit on any real lint violation (strict = warnings are errors).
+    lint:
+      glob: "*.swift"
+      run: swiftlint lint --strict {staged_files}
+
+pre-push:
+  commands:
+    # Last line of defense before code leaves the machine.
+    lint-all:
+      run: swiftlint lint --strict

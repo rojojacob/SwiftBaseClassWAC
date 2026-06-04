@@ -1,0 +1,67 @@
+# SwiftLint configuration
+# Docs: https://realm.github.io/SwiftLint/rule-directory.html
+# Run locally:  swiftlint            (lint)
+#               swiftlint --strict   (CI / pre-commit: warnings become errors)
+
+disabled_rules:
+  - trailing_whitespace        # handled by SwiftFormat
+
+opt_in_rules:
+  - empty_count
+  - force_unwrapping
+  - explicit_init
+  - first_where
+  - contains_over_filter_count
+  - last_where
+  - sorted_first_last
+  - toggle_bool
+  - redundant_nil_coalescing
+  - closure_spacing
+  - operator_usage_whitespace
+  - vertical_whitespace_closing_braces
+  - multiline_arguments
+
+analyzer_rules:
+  - unused_declaration
+  - unused_import
+
+excluded:
+  - .build
+  - DerivedData
+  - "**/Generated"
+  - fastlane
+
+line_length:
+  warning: 120
+  error: 160
+  ignores_comments: true
+  ignores_urls: true
+
+type_body_length:
+  warning: 300
+  error: 450
+
+file_length:
+  warning: 500
+  error: 800
+
+function_body_length:
+  warning: 60
+  error: 100
+
+identifier_name:
+  min_length: 2
+  excluded:
+    - id
+    - x
+    - y
+    - to
+    - vm
+
+type_name:
+  min_length: 3
+  max_length:
+    warning: 50
+    error: 60
+
+reporter: "xcode"
