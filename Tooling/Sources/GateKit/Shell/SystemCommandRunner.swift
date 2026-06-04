@@ -1,6 +1,8 @@
 import Foundation
 
 public struct SystemCommandRunner: CommandRunner {
+    private let readQueue = DispatchQueue(label: "gate.command.read", attributes: .concurrent)
+
     public init() {}
 
     public func run(_ argv: [String], cwd: URL, env: [String: String]) throws -> ProcessResult {
@@ -20,11 +22,10 @@ public struct SystemCommandRunner: CommandRunner {
         // Read both pipes concurrently so a full stderr buffer can't deadlock
         // a blocked stdout read (and vice versa).
         let group = DispatchGroup()
-        let queue = DispatchQueue(label: "gate.command.read", attributes: .concurrent)
         let outBox = DataBox()
         let errBox = DataBox()
-        queue.async(group: group) { outBox.value = outPipe.fileHandleForReading.readDataToEndOfFile() }
-        queue.async(group: group) { errBox.value = errPipe.fileHandleForReading.readDataToEndOfFile() }
+        readQueue.async(group: group) { outBox.value = outPipe.fileHandleForReading.readDataToEndOfFile() }
+        readQueue.async(group: group) { errBox.value = errPipe.fileHandleForReading.readDataToEndOfFile() }
         process.waitUntilExit()
         group.wait()
 

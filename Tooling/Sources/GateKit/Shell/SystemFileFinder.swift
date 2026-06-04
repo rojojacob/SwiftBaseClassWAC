@@ -5,8 +5,12 @@ public struct SystemFileFinder: FileFinder {
 
     public func files(in directory: String, matching pattern: String) -> [String] {
         let base = URL(fileURLWithPath: directory)
+        // Recurse the subtree, skipping hidden dirs (.git/.build); silently ignore
+        // unreadable entries. Returns the `.swift` files whose basename matches the glob.
         guard let enumerator = FileManager.default.enumerator(
-            at: base, includingPropertiesForKeys: nil
+            at: base,
+            includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles]
         ) else { return [] }
 
         var matches: [String] = []

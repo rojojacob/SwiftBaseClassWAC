@@ -7,7 +7,7 @@ final class FakeFileFinder: FileFinder {
     func files(in directory: String, matching pattern: String) -> [String] {
         (filesByDirectory[directory] ?? []).filter { path in
             let name = path.split(separator: "/").last.map(String.init) ?? path
-            return Glob.matches(pattern, name: name)
+            return name.hasSuffix(".swift") && Glob.matches(pattern, name: name)
         }
     }
 }
