@@ -5,27 +5,22 @@
 # Prerequisites (one-time): see docs/RELEASE_SETUP.md
 #   - `bundle install`  (installs fastlane from the Gemfile)
 #   - A private "match" repo for signing assets (set MATCH_GIT_URL)
-#   - An App Store Connect API key (.p8) + Key ID + Issuer ID for uploads.
+#   - An App Store Connect API key (.p8) + Key ID + Issuer ID.
 #
 # Credentials are read from the environment (see fastlane/.env.example).
-# Locally, copy it to fastlane/.env (gitignored); in CI, set repo secrets.
+# The API key is supplied to match/pilot/deliver as a JSON file via
+# `api_key_path` (generated locally / from CI secrets; gitignored).
 
 default_platform(:ios)
 
 SCHEME = "SwiftBaseClassWAC"
 PROJECT = "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj"
+ASC_KEY = "fastlane/asc_api_key.json"
 
-# Authenticate with the App Store Connect API key. Returns a key hash that
-# match / pilot / deliver pick up automatically via lane context, so uploads
-# never fall back to interactive Apple-ID + 2FA login (which breaks on CI).
-def load_asc_api_key
-  app_store_connect_api_key(
-    key_id: ENV.fetch("APP_STORE_CONNECT_API_KEY_ID"),
-    issuer_id: ENV.fetch("APP_STORE_CONNECT_API_ISSUER_ID"),
-    key_filepath: ENV.fetch("APP_STORE_CONNECT_API_KEY_PATH"),
-    in_house: false
-  )
-end
+# macOS system Ruby links LibreSSL, whose AES-GCM binding (match's default v2
+# encryption) is broken; legacy AES-256-CBC works and is still decryptable by
+# OpenSSL-3 machines (e.g. CI). Force it so match storage is portable.
+MATCH_LEGACY = true
 
 platform :ios do
   desc "Run the full test suite (mirrors CI)"
@@ -37,12 +32,15 @@ platform :ios do
     )
   end
 
+  desc "Generate / sync App Store signing assets via match"
+  lane :certificates do
+    match(type: "appstore", api_key_path: ASC_KEY, force_legacy_encryption: MATCH_LEGACY)
+  end
+
   desc "Build a signed .ipa and upload to TestFlight (internal + external testing)"
   lane :beta do
-    api_key = load_asc_api_key
-
     # Sync signing assets from the private match repo (read-only on CI).
-    match(type: "appstore", readonly: is_ci, api_key: api_key)
+    match(type: "appstore", readonly: is_ci, api_key_path: ASC_KEY, force_legacy_encryption: MATCH_LEGACY)
 
     # Bump the build number so each upload is unique.
     increment_build_number(xcodeproj: PROJECT)
@@ -55,14 +53,12 @@ platform :ios do
     )
 
     # Upload to TestFlight without blocking on Apple's processing.
-    upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: true)
+    upload_to_testflight(api_key_path: ASC_KEY, skip_waiting_for_build_processing: true)
   end
 
   desc "Promote the latest build for App Store review"
   lane :release do
-    api_key = load_asc_api_key
-
-    match(type: "appstore", readonly: is_ci, api_key: api_key)
+    match(type: "appstore", readonly: is_ci, api_key_path: ASC_KEY, force_legacy_encryption: MATCH_LEGACY)
     build_app(
       project: PROJECT,
       scheme: SCHEME,
@@ -70,7 +66,7 @@ platform :ios do
     )
     # Submit metadata + binary. Configure metadata under fastlane/metadata/.
     upload_to_app_store(
-      api_key: api_key,
+      api_key_path: ASC_KEY,
       submit_for_review: true,
       automatic_release: false,
       force: true,
