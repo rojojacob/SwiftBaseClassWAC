@@ -1,0 +1,53 @@
+import Foundation
+import Testing
+@testable import GateKit
+
+/// A stage that records that it ran and returns a fixed outcome.
+private final class SpyStage: Stage {
+    let id: StageID
+    let outcome: Outcome
+    private(set) var didRun = false
+    init(id: StageID, outcome: Outcome) {
+        self.id = id
+        self.outcome = outcome
+    }
+
+    func run(_: ResolvedScope, _: GateContext) throws -> StageResult {
+        didRun = true
+        return StageResult(stage: id, outcome: outcome, findings: [], summary: "\(id.rawValue):\(outcome)")
+    }
+}
+
+private func anyContext() -> GateContext {
+    makeContext(runner: FakeCommandRunner())
+}
+
+@Test func pipelineRunsAllStagesWhenGreen() throws {
+    let s1 = SpyStage(id: .format, outcome: .passed)
+    let s2 = SpyStage(id: .lint, outcome: .passed)
+    let report = try Pipeline(stages: [s1, s2]).run(
+        scope: ResolvedScope(kind: .all, screens: []), context: anyContext()
+    )
+    #expect(report.passed)
+    #expect(s1.didRun)
+    #expect(s2.didRun)
+    #expect(report.results.count == 2)
+}
+
+@Test func pipelineStopsAtFirstFailure() throws {
+    let s1 = SpyStage(id: .format, outcome: .failed)
+    let s2 = SpyStage(id: .lint, outcome: .passed)
+    let report = try Pipeline(stages: [s1, s2]).run(
+        scope: ResolvedScope(kind: .all, screens: []), context: anyContext()
+    )
+    #expect(report.passed == false)
+    #expect(s1.didRun)
+    #expect(s2.didRun == false) // fail-fast: never reached
+    #expect(report.results.count == 1)
+}
+
+@Test func standardFactoryMapsConfigStages() {
+    // makeTestConfig() has stages [format, lint, build, test]; `build` folds into the test stage.
+    let pipeline = Pipeline.standard(for: makeTestConfig())
+    #expect(pipeline.stages.map(\.id) == [.format, .lint, .test])
+}
