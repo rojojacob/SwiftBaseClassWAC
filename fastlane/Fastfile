@@ -16,7 +16,8 @@ default_platform(:ios)
 SCHEME = "SwiftBaseClassWAC"
 PROJECT = "SwiftBaseClassWAC/SwiftBaseClassWAC.xcodeproj"
 APP_IDENTIFIER = "com.wac.SwiftBaseClassWAC"
-APP_VERSION = "1.0.0" # marketing version; keep in sync with MARKETING_VERSION in the project
+APP_VERSION = "1.0" # marketing version; keep in sync with MARKETING_VERSION in the project
+                    # (App Store normalizes trailing ".0", so "1.0.0" == "1.0")
 ASC_KEY = "fastlane/asc_api_key.json"
 
 # macOS system Ruby links LibreSSL, whose AES-GCM binding (match's default v2
@@ -24,10 +25,11 @@ ASC_KEY = "fastlane/asc_api_key.json"
 # OpenSSL-3 machines (e.g. CI). Force it so match storage is portable.
 MATCH_LEGACY = true
 
-# Next build number for a version train: (max existing build number for that
-# CFBundleShortVersionString) + 1, or 1 if none. latest_testflight_build_number
-# returns the GLOBAL latest regardless of version, so we filter explicitly here
-# to keep build numbers clean (1, 2, 3, ...) per version.
+# Smallest unused build number for a version train. App Store requires build
+# numbers to be UNIQUE per version (not strictly increasing), so we pick the
+# lowest free integer — keeping numbers clean (1, 2, 3, ...) even if an earlier
+# build used a large/timestamp number. latest_testflight_build_number can't do
+# this (it returns the global max regardless of version), so we query directly.
 def next_build_number(version)
   require "spaceship"
   # Absolute path: inside a lane fastlane's CWD is the fastlane/ dir, so a
@@ -35,8 +37,10 @@ def next_build_number(version)
   Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.from_json_file(File.join(__dir__, "asc_api_key.json"))
   app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
   builds = app.get_builds(includes: "preReleaseVersion", limit: 200)
-  nums = builds.select { |b| b.pre_release_version&.version == version }.map { |b| b.version.to_i }
-  (nums.max || 0) + 1
+  used = builds.select { |b| b.pre_release_version&.version == version }.map { |b| b.version.to_i }
+  n = 1
+  n += 1 while used.include?(n)
+  n
 end
 
 platform :ios do
