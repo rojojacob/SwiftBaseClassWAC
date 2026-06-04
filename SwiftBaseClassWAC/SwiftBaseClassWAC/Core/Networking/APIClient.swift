@@ -9,7 +9,7 @@
 import Foundation
 
 protocol APIClient: Sendable {
-    func get<Response: Decodable>(_ endpoint: URL, as type: Response.Type) async throws -> Response
+    func get<Response: Decodable & Sendable>(_ endpoint: URL, as type: Response.Type) async throws -> Response
 }
 
 enum APIError: Error, Equatable {
@@ -26,7 +26,7 @@ struct URLSessionAPIClient: APIClient {
         self.decoder = decoder
     }
 
-    func get<Response: Decodable>(_ endpoint: URL, as _: Response.Type) async throws -> Response {
+    func get<Response: Decodable & Sendable>(_ endpoint: URL, as _: Response.Type) async throws -> Response {
         let (data, response) = try await session.data(from: endpoint)
         guard let http = response as? HTTPURLResponse else {
             throw APIError.invalidResponse(statusCode: -1)
