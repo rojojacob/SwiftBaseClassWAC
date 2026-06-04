@@ -22,11 +22,7 @@ opt_in_rules:
   - vertical_whitespace_closing_braces
   - multiline_arguments
   # ── Phase 2B: stricter standard ──
-  # omitted: file_name — flags AppTheme.swift, OnFirstAppear.swift, ErrorAlert.swift,
-  #   HTTPStatus.swift, Codable+RawRepresentable.swift (multi-type / extension-pattern files
-  #   throughout app + Tooling); file_name.excluded can't exclude by file path, only by
-  #   type-name pattern, so there is no non-disruptive way to keep it green without
-  #   splitting/renaming every intentionally grouped file.
+  - file_name                     # filename must match the primary declared type (excludes below)
   - fatal_error_message           # fatalError must explain why
   - empty_string                  # `x.isEmpty` not `x == ""`
   - empty_collection_literal      # `x.isEmpty` not `x == []`
@@ -41,9 +37,7 @@ opt_in_rules:
   - vertical_parameter_alignment_on_call
   - yoda_condition
   - implicitly_unwrapped_optional # no `T!` ivars
-  - private_action
-  - private_outlet
-  - overridden_super_call
+  - overridden_super_call         # UIKit/URLProtocol override-completeness
   - prohibited_super_call
 
 analyzer_rules:
@@ -93,11 +87,23 @@ type_name:
     warning: 50
     error: 60
 
+file_name:
+  severity: warning
+  excluded_paths:
+    - Tooling                     # the gate engine intentionally groups types per file
+  excluded:                       # intentionally multi-type / extension files in the app
+    - AppTheme.swift
+    - Codable+RawRepresentable.swift
+    - ErrorAlert.swift
+    - HTTPStatus.swift
+    - OnFirstAppear.swift
+    - XCUIHelpers.swift
+
 custom_rules:
   no_print:
     name: "Use AppLogger, not print"
     included: ".*/SwiftBaseClassWAC/SwiftBaseClassWAC/.*\\.swift"
-    regex: "\\bprint\\("
+    regex: "\\b(print|debugPrint)\\("
     match_kinds:
       - identifier
     message: "Use AppLogger instead of print() in app code."
@@ -107,13 +113,15 @@ custom_rules:
     included: ".*View\\.swift"
     excluded: ".*Tests.*"
     regex: "\\b(APIClient|URLSession|Dependencies\\.live)\\b"
+    match_kinds:
+      - identifier
     message: "Views must not touch networking or the DI container directly — go through a ViewModel."
     severity: error
   viewmodel_no_swiftui:
     name: "ViewModel is UI-framework-free"
     included: ".*ViewModel\\.swift"
     excluded: ".*Tests.*"
-    regex: "^import +SwiftUI"
+    regex: "^(@testable +)?import +SwiftUI"
     message: "View models must not import SwiftUI — keep presentation logic UI-agnostic (use Observation)."
     severity: error
 
