@@ -19,6 +19,9 @@ enum CommandSupport {
         if !report.passed { throw ExitCode.failure }
 
         // Keyword release stages only run AFTER a green gate, and only when requested.
+        // A vacuous pass (e.g. `gate staged` with nothing screen-relevant staged →
+        // zero results) must NOT certify a release — there is nothing to archive/upload.
+        guard archive || testflight, !report.results.isEmpty else { return }
         let context = GateContext(config: gate.config, runner: SystemCommandRunner(), repoRoot: cwd)
         if archive { try runRelease(ArchiveStage(), context) }
         if testflight { try runRelease(TestFlightStage(), context) }
