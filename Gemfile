@@ -4,6 +4,6 @@
 
 source "https://rubygems.org"
 
-gem "fastlane"
+gem "fastlane", "~> 2.230.0"
 # Note: xcbeautify is a CLI (brew install xcbeautify), not a gem.
 # It's preinstalled on GitHub macOS runners and used by the CI workflow.
