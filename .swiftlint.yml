@@ -93,4 +93,14 @@ type_name:
     warning: 50
     error: 60
 
+custom_rules:
+  no_print:
+    name: "Use AppLogger, not print"
+    included: ".*/SwiftBaseClassWAC/SwiftBaseClassWAC/.*\\.swift"
+    regex: "\\bprint\\("
+    match_kinds:
+      - identifier
+    message: "Use AppLogger instead of print() in app code."
+    severity: error
+
 reporter: "xcode"
