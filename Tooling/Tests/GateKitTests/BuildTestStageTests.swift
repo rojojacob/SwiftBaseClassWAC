@@ -58,3 +58,11 @@ import Testing
     #expect(call.contains("-only-testing:AppTests/CounterModelTests"))
     #expect(call.contains("-only-testing:AppUITests/CounterUITests") == false) // UI excluded
 }
+
+@Test func passesGateSkipStampSoTheOwnBuildIsNotBlocked() throws {
+    let runner = FakeCommandRunner()
+    _ = try BuildTestStage().run(ResolvedScope(kind: .all, screens: []), makeContext(runner: runner))
+    let call = try #require(runner.calls.first)
+    // The build-phase guard must be bypassed during the gate's own xcodebuild.
+    #expect(call.contains("GATE_SKIP_STAMP=1"))
+}

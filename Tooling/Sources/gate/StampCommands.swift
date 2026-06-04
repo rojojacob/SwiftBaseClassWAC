@@ -24,7 +24,7 @@ struct VerifyStampCommand: ParsableCommand {
             return
         }
         for name in result.staleScreens {
-            print("✘ \(name) changed since last green gate — run 'gate screen \(name)'")
+            print("✘ \(name) changed since last green gate — run 'gate screen \(name)' (or 'gate all')")
         }
         throw ExitCode.failure
     }

@@ -35,7 +35,10 @@ public struct GateRunner {
         let pipeline = try Pipeline.standard(for: config, unitOnly: unitOnly)
         let context = GateContext(config: config, runner: runner, repoRoot: repoRoot)
         let report = try pipeline.run(scope: scope, context: context)
-        if report.passed {
+        // Only a FULL pass earns a stamp. A unit-only run skipped the UI tests, so
+        // stamping it would mark the screen green at the ⌘R guard without its UI
+        // tests ever having run (a false green) — leave the stamp to a full run.
+        if report.passed, !unitOnly {
             let stamped = scope.isAll ? resolver.allScreens() : scope.screens
             try StampWriter(hasher: hasher(), store: stampStore).record(stamped)
         }

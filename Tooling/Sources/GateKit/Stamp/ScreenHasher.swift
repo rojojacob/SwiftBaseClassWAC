@@ -21,11 +21,14 @@ public struct ScreenHasher {
         let sourceFiles = finder.files(in: codeDir, matching: "*.swift")
         // Sort so the hash is independent of filesystem enumeration order.
         let paths = (sourceFiles + screen.unitTestFiles + screen.uiTestFiles).sorted()
+        let rootPrefix = repoRoot.path.hasSuffix("/") ? repoRoot.path : repoRoot.path + "/"
 
         var hasher = SHA256()
         for path in paths {
-            // Mix the path in too, so moving identical content between files still changes the hash.
-            hasher.update(data: Data(path.utf8))
+            // Mix the REPO-RELATIVE path in too, so moving identical content between
+            // files changes the hash while the hash stays independent of checkout location.
+            let relative = path.hasPrefix(rootPrefix) ? String(path.dropFirst(rootPrefix.count)) : path
+            hasher.update(data: Data(relative.utf8))
             try hasher.update(data: reader.contents(of: path))
         }
         return hasher.finalize().map { String(format: "%02x", $0) }.joined()

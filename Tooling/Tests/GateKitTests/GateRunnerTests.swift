@@ -44,6 +44,29 @@ import Testing
     #expect(store.load().hashes["Counter"]?.isEmpty == false) // stamped
 }
 
+@Test func unitOnlyPassingRunDoesNotStamp() throws {
+    let runner = FakeCommandRunner() // all stages exit 0
+    let finder = FakeFileFinder()
+    finder.filesByDirectory["/repo/App/App/Features/Counter"] = ["/repo/App/App/Features/Counter/CounterView.swift"]
+    finder.filesByDirectory["/repo/App/AppTests"] = ["/repo/App/AppTests/CounterModelTests.swift"]
+    let reader = FakeFileReader()
+    reader.filesByPath["/repo/App/App/Features/Counter/CounterView.swift"] = Data("v1".utf8)
+    reader.filesByPath["/repo/App/AppTests/CounterModelTests.swift"] = Data("test".utf8)
+    let store = FakeStampStore()
+    let gate = GateRunner(
+        config: makeTestConfig(),
+        runner: runner,
+        finder: finder,
+        reader: reader,
+        stampStore: store,
+        repoRoot: URL(fileURLWithPath: "/repo")
+    )
+
+    let report = try gate.run(.screens(["Counter"]), unitOnly: true)
+    #expect(report.passed)
+    #expect(store.saved.isEmpty) // unit-only pass must NOT stamp (UI tests were skipped)
+}
+
 @Test func failingRunDoesNotStamp() throws {
     let runner = FakeCommandRunner()
     runner.stub(whenContains: "xcodebuild", result: ProcessResult(exitCode: 65, stdout: "", stderr: "fail"))

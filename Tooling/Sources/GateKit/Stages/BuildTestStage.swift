@@ -13,7 +13,12 @@ public struct BuildTestStage: Stage {
             "xcodebuild", "test",
             "-project", config.project,
             "-scheme", config.scheme,
-            "-destination", "platform=iOS Simulator,name=\(config.simulator)"
+            "-destination", "platform=iOS Simulator,name=\(config.simulator)",
+            // Skip the in-build "stuck until green" guard during the gate's OWN
+            // xcodebuild — a build-setting override reaches the build-phase script as
+            // an env var. Without this the verify-stamp phase fails the build before
+            // the gate can stamp (chicken-and-egg). Interactive ⌘R builds still enforce.
+            "GATE_SKIP_STAMP=1"
         ]
         if scope.kind == .screens {
             for screen in scope.screens {
