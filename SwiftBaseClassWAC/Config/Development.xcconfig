@@ -1,0 +1,5 @@
+// Development.xcconfig — mapped to the Debug build configuration.
+#include "Shared.xcconfig"
+
+APP_ENVIRONMENT = development
+API_BASE_URL = jsonplaceholder.typicode.com

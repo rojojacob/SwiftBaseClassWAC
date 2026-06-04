@@ -88,3 +88,6 @@ Gemfile.lock
 # Editor / assistant local settings
 # ---------------------------------------------------------------------------
 .claude/settings.local.json
+
+# xcconfig secrets (real file is local-only)
+SwiftBaseClassWAC/Config/Secrets.xcconfig

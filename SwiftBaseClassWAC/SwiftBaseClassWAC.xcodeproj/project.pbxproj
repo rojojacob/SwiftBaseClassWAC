@@ -27,6 +27,12 @@
 		A100000000000000000000A2 /* SwiftBaseClassWACTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftBaseClassWACTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B100000000000000000000B2 /* SwiftBaseClassWACUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftBaseClassWACUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3FD57692FD105A900730A7E /* SwiftBaseClassWAC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftBaseClassWAC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF00000000000000000000C1 /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C2 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C3 /* Staging.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Staging.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C4 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C5 /* Secrets.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.example.xcconfig; sourceTree = "<group>"; };
+		CF00000000000000000000C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,11 +81,25 @@
 		F3FD57602FD105A900730A7E = {
 			isa = PBXGroup;
 			children = (
+				CF00000000000000000000C0 /* Config */,
 				F3FD576B2FD105A900730A7E /* SwiftBaseClassWAC */,
 				A100000000000000000000A6 /* SwiftBaseClassWACTests */,
 				B100000000000000000000B6 /* SwiftBaseClassWACUITests */,
 				F3FD576A2FD105A900730A7E /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		CF00000000000000000000C0 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CF00000000000000000000C1 /* Shared.xcconfig */,
+				CF00000000000000000000C2 /* Development.xcconfig */,
+				CF00000000000000000000C3 /* Staging.xcconfig */,
+				CF00000000000000000000C4 /* Production.xcconfig */,
+				CF00000000000000000000C5 /* Secrets.example.xcconfig */,
+				CF00000000000000000000C6 /* Info.plist */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		F3FD576A2FD105A900730A7E /* Products */ = {
@@ -489,6 +509,7 @@
 		};
 		F3FD57752FD105AA00730A7E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF00000000000000000000C2 /* Development.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -497,6 +518,7 @@
 				DEVELOPMENT_TEAM = T92Y92RB48;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -521,6 +543,7 @@
 		};
 		F3FD57762FD105AA00730A7E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF00000000000000000000C4 /* Production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -529,6 +552,7 @@
 				DEVELOPMENT_TEAM = T92Y92RB48;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
